@@ -8,15 +8,26 @@
   <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 </head>
 <body>
-  <div class="parent">
-    <div id="drag-1" class="draggable">
-      <p> Element 1 </p>
+  <div class="formBuildArea">
+    <div id="stagingArea">
+      <div class="staged" draggable="true">A</div>
+      <div class="staged" draggable="true">B</div>
+      <div class="staged" draggable="true">C</div>
     </div>
-    <div id="drag-2" class="draggable">
-      <p> Element 2 </p>
+    <div id="options">
+      <ul>
+        <li>maxlength</li>
+        <li>width</li>
+        <li>options</li>
+        <li>other stuff</li>
+      </ul>
+    </div>
+    <div id="controls">
+        <div class="controls" draggable="true">D</div>
+        <div class="controls" draggable="true">E</div>
+        <div class="controls" draggable="true">F</div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/interactjs@1.3.4/dist/interact.min.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

@@ -1,32 +1,100 @@
-.parent {
-  margin: 4%;
+body {
+  width: 90%;
+  margin: 0 auto;
+  padding:20px;
+}
+
+.formBuildArea {
+  padding:20px;
+  display: flex;
+  justify-content: space-around;
+  border:1px solid black;
+}
+
+/* Prevent the text contents of draggable elements from being selectable. */
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+.staged {
+  height: 150px;
+  width: 350px;
+  border: 2px solid #666666;
   background-color: #ccc;
-  width: 900px;
-  height: 700px;
-  border-radius: 0.75em;
+  margin-right: 5px;
+  -webkit-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 3px #000;
+  -ms-box-shadow: inset 0 0 3px #000;
+  box-shadow: inset 0 0 3px #000;
+  text-align: center;
+  cursor: move;
+}
+.staged header, .controls header {
+  color: #fff;
+  text-shadow: #000 0 1px;
+  box-shadow: 5px;
+  padding: 5px;
+  background: -moz-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
+  background: -webkit-gradient(linear, left top, right top,
+                               color-stop(0, rgb(0,0,0)),
+                               color-stop(0.50, rgb(79,79,79)),
+                               color-stop(1, rgb(21,21,21)));
+  background: -webkit-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
+  background: -ms-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
+  border-bottom: 1px solid #ddd;
+  -webkit-border-top-left-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  -ms-border-radius-topleft: 10px;
+  border-top-left-radius: 10px;
+  -webkit-border-top-right-radius: 10px;
+  -ms-border-top-right-radius: 10px;
+  -moz-border-radius-topright: 10px;
+  border-top-right-radius: 10px;
 }
 
-#drag-1, #drag-2 {
-  width: 100%;
-  height: 25%;
-  min-height: 6.5em;
-  /* margin: 10%; */
-
-  background-color: #29e;
-  color: white;
-
-  border-radius: 0.75em;
-  /* padding: 4%; */
-
-  -webkit-transform: translate(0px, 0px);
-          transform: translate(0px, 0px);
+.staged.over {
+  border: 2px dashed #000;
 }
 
-p {
-  padding: 4%;
-} 
+#controls {
+  border-left:solid black 1px;
+  width:100%;
+}
 
-#drag-me::before {
-  content: "#" attr(id);
-  font-weight: bold;
+.controls {
+  width:100%;
+  border: 2px solid #666666;
+  background-color: #ccc;
+  margin-right: 5px;
+  -webkit-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 3px #000;
+  -ms-box-shadow: inset 0 0 3px #000;
+  box-shadow: inset 0 0 3px #000;
+  text-align: center;
+  cursor: move;
+}
+
+#options {
+  padding:10px;
+}
+
+#options li {
+  list-style: none;
+}
+#controls li {
+  border:solid black 1px;
+  border-radius: 10px;
+  width:100%;
+  list-style: none;
 }
