@@ -1,44 +1,44 @@
-function handleDragStart(e) {
+function handleDragStart(event) {
   dragSrcEl = this;
 
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/html', this.innerHTML);
+  event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData('text/html', this.innerHTML);
 }
 
-function handleDragOver(e) {
-  if (e.preventDefault) {
-    e.preventDefault(); // Necessary. Allows us to drop.
+function handleDragOver(event) {
+  if (event.preventDefault) {
+    event.preventDefault(); // Necessary. Allows us to drop.
   }
 
-  e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+  event.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
 
   return false;
 }
 
-function handleDragEnter(e) {
-  // this / e.target is the current hover target.
+function handleDragEnter(event) {
+  // this / event.target is the current hover target.
   this.classList.add('over');
 }
 
-function handleDragLeave(e) {
-  this.classList.remove('over');  // this / e.target is previous target element.
+function handleDragLeave(event) {
+  this.classList.remove('over');  // this / event.target is previous target element.
 }
 
-function handleDrop(e) {
-  // this / e.target is current target element.
+function handleDrop(event) {
+  // this / event.target is current target element.
 
-  if (e.stopPropagation) {
-    // this/e.target is current target element.
+  if (event.stopPropagation) {
+    // this/event.target is current target element.
   
-    if (e.stopPropagation) {
-      e.stopPropagation(); // Stops some browsers from redirecting.
+    if (event.stopPropagation) {
+      event.stopPropagation(); // Stops some browsers from redirecting.
     }
   
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
       // Set the source column's HTML to the HTML of the column we dropped on.
       dragSrcEl.innerHTML = this.innerHTML;
-      this.innerHTML = e.dataTransfer.getData('text/html');
+      this.innerHTML = event.dataTransfer.getData('text/html');
       // if the element is in the top half of the staged element
         // append it to the staging area above the staged element
       // if in bottom half
@@ -49,8 +49,8 @@ function handleDrop(e) {
   }
 }
 
-function handleDragEnd(e) {
-  // this/e.target is the source node.
+function handleDragEnd(event) {
+  // this/event.target is the source nodevent.
 
   [].forEach.call(cols, function (col) {
     col.classList.remove('over');

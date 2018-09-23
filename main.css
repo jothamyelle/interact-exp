@@ -22,7 +22,7 @@ body {
   -webkit-user-drag: element;
 }
 .staged {
-  height: 150px;
+  height: 50px;
   width: 350px;
   border: 2px solid #666666;
   background-color: #ccc;
