@@ -10,6 +10,8 @@ function getTargetMiddle(currentElement) {
   targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
 }
 
+// Change Option to form control
+
 function createDeleteButton() {
   const button = document.createElement('button');
   button.classList.add('deleteControl');
@@ -42,16 +44,18 @@ function createFormInput(inputType) {
 }
 
 function turnToFormControl(node) {
+
   const inputType = node.dataset.type;
-  // console.log('label:', );
   node.append(createFormInput(inputType));
 
   const deleteButton = createDeleteButton();
   node.append(deleteButton);
   addDeleteListener(deleteButton);
+  
   const duplicateButton = createDuplicateButton();
   node.prepend(duplicateButton);
   addDuplicateListener(duplicateButton);
+  
   return node;
 }
 
