@@ -1,6 +1,8 @@
 let dragSrcEl = null;
+let idCounter = 0;
 
 function handleDragStart(event) {
+  this.style.opacity = '0.4';
   dragSrcEl = this;
 
   event.dataTransfer.effectAllowed = 'move';
@@ -19,7 +21,6 @@ function handleDragOver(event) {
 
 function handleDragEnter(event) {
   // this / event.target is the current hover target.
-  console.log("this:", this);
   this.classList.add('over');
 }
 
@@ -39,11 +40,23 @@ function handleDrop(event) {
   
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
-      // appends the div to the staging area
-      const stagingArea = document.getElementById("stagingArea");
-      let newStagedElement = dragSrcEl.cloneNode(true);
-      newStagedElement.classList.add("staged");
-      stagingArea.appendChild(newStagedElement);
+      
+      // use this to check which container the dragged 
+      // element is from: ---> dragSrcEl.parentNode.id
+      
+      // if doesnt exist in the staging area
+      if (dragSrcEl.parentNode.id === 'controls') {
+        // appends the div to the staging area
+        const stagingArea = document.getElementById("stagingArea");
+        let newStagedElement = dragSrcEl.cloneNode(true);
+        newStagedElement.classList.remove('controls');
+        newStagedElement.classList.add('staged');
+        newStagedElement.setAttribute('id', idCounter++);
+        stagingArea.appendChild(newStagedElement);
+      } else {
+        this.insertAdjacentElement('afterend', dragSrcEl);
+      }
+      // if exists then move it
 
       let stagedRows = document.querySelectorAll('#stagingArea .staged');
       [].forEach.call(stagedRows, function(stagedRow) {
@@ -64,6 +77,7 @@ function handleDrop(event) {
 
 function handleDragEnd(event) {
   // this/event.target is the source nodevent.
+  this.style.opacity = '1';
 
   [].forEach.call(stagedRows, function (stagedRow) {
     stagedRow.classList.remove('over');
@@ -83,8 +97,6 @@ let stagedRows = document.querySelectorAll('#stagingArea .staged');
   stagedRow.addEventListener('drop', handleDrop, false);
   stagedRow.addEventListener('dragend', handleDragEnd, false);
 });
-
-let stagingArea = document.querySelector('#stagingArea');
 
 var controlRows = document.querySelectorAll('#controls .controls');
 [].forEach.call(controlRows, function(controlRow) {
