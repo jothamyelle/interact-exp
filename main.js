@@ -47,21 +47,18 @@ function handleDrop(event) {
       // if doesnt exist in the staging area
       if (dragSrcEl.parentNode.id === 'controls') {
         // appends the div to the staging area
-
-        //check if the staging area has more than one element
-        // if it does, delete the first one
-        let stagedItems = document.querySelectorAll("#stagingArea .staged");
-        if(document.getElementById("beginnerItem")) {
-          document.getElementById("beginnerItem").remove();
-        }
         const stagingArea = document.getElementById("stagingArea");
         let newStagedElement = dragSrcEl.cloneNode(true);
         newStagedElement.classList.remove('controls');
         newStagedElement.classList.add('staged');
         newStagedElement.setAttribute('id', idCounter++);
         newStagedElement.style.opacity = '1';
-        stagingArea.appendChild(newStagedElement);
+        this.insertAdjacentElement('afterend', newStagedElement);
         this.classList.remove('over');
+        // get rid of the placeholder item
+        if(document.getElementById("beginnerItem")) {
+          document.getElementById("beginnerItem").remove();
+        }
       } else {
         this.insertAdjacentElement('afterend', dragSrcEl);
         this.classList.remove('over');
