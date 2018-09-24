@@ -78,6 +78,7 @@ var cols = document.querySelectorAll('#controls .controls');
   col.addEventListener('dragend', handleDragEnd, false);
 });
 
+
 // Reset Button
 
 const resetButton = document.getElementById('resetButton');
@@ -90,12 +91,41 @@ resetButton.addEventListener('click', function() {
   }
 })
 
+// Control Handlers
+
+// Helpers
+
+function addDeleteListener(button) {
+  button.addEventListener('click', function() {
+    button.parentElement.remove();
+  })
+}
+
+function addDuplicateListener(button) {
+  button.addEventListener('click', function() {
+    const control = button.parentElement;
+    const clone = control.cloneNode(true);
+    const cloneDelete = clone.getElementsByClassName('deleteControl')[0];
+    addDeleteListener(cloneDelete);
+    const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
+    addDuplicateListener(cloneDuplicate);
+    control.parentElement.insertBefore(clone, control);
+  })
+}
+
+
 // Delete Buttons
 
 const deleteButtons = document.getElementsByClassName('deleteControl');
 
 Array.prototype.forEach.call(deleteButtons, function(button) {
-  button.addEventListener('click', function() {
-    button.parentElement.remove();
-  })
+  addDeleteListener(button);
+})
+
+// Duplicate Buttons
+
+const duplicateButtons = document.getElementsByClassName('duplicateControl');
+
+Array.prototype.forEach.call(duplicateButtons, function(button) {
+  addDuplicateListener(button);
 })

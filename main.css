@@ -102,3 +102,7 @@ body {
 .deleteControl {
   float: right;
 }
+
+.duplicateControl {
+  float: left;
+}
