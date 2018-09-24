@@ -9,11 +9,30 @@ function handleDragStart(event) {
   event.dataTransfer.setData('text/html', this.innerHTML);
 }
 
+function offset(el) {
+  let rect = el.getBoundingClientRect(),
+  scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+  scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+}
+
 function handleDragOver(event) {
   if (event.preventDefault) {
     event.preventDefault(); // Necessary. Allows us to drop.
   }
+  let targetPositionYTop = offset(this).top;
+  let targetPositionYBottom = targetPositionYTop + 50;
+  let targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
 
+  if(event.clientY < targetMiddle) {
+    this.classList.add('over-top');
+    this.classList.remove('over');
+    this.classList.remove('over-bottom');
+  } else {
+    this.classList.add('over-bottom');
+    this.classList.remove('over');
+    this.classList.remove('over-top');
+  }
   event.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
 
   return false;
@@ -26,10 +45,13 @@ function handleDragEnter(event) {
 
 function handleDragLeave(event) {
   this.classList.remove('over');  // this / event.target is previous target element.
+  this.classList.remove('over-top');
+  this.classList.remove('over-bottom');
 }
 
 function handleDrop(event) {
   // this / event.target is current target element.
+  console.log("'this' y location:", event.clientY);
 
   if (event.stopPropagation) {
     // this/event.target is current target element.
@@ -55,6 +77,8 @@ function handleDrop(event) {
         newStagedElement.style.opacity = '1';
         this.insertAdjacentElement('afterend', newStagedElement);
         this.classList.remove('over');
+        this.classList.remove('over-top');
+        this.classList.remove('over-bottom');
         // get rid of the placeholder item
         if(document.getElementById("beginnerItem")) {
           document.getElementById("beginnerItem").remove();
@@ -62,6 +86,8 @@ function handleDrop(event) {
       } else {
         this.insertAdjacentElement('afterend', dragSrcEl);
         this.classList.remove('over');
+        this.classList.remove('over-top');
+        this.classList.remove('over-bottom');
       }
 
       let stagedRows = document.querySelectorAll('#stagingArea .staged');
@@ -85,6 +111,8 @@ function handleDragEnd(event) {
 
   [].forEach.call(stagedRows, function (stagedRow) {
     stagedRow.classList.remove('over');
+    this.classList.remove('over-top');
+    this.classList.remove('over-bottom');
   });
 
   [].forEach.call(controlRows, function (controlRow) {
