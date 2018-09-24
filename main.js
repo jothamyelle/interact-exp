@@ -250,6 +250,10 @@ resetButton.addEventListener('click', function() {
 function addDeleteListener(button) {
   button.addEventListener('click', function() {
     button.parentElement.remove();
+    console.log('The staging area is', stagingArea.innerHTML);
+    if(!stagingArea.innerHTML.trim()) {
+      stagingArea.append(createbeginnerItem());
+    }
   })
 }
 
