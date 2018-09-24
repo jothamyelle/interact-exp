@@ -84,5 +84,8 @@ const resetButton = document.getElementById('resetButton');
 const stagingArea = document.getElementById('stagingArea');
 
 resetButton.addEventListener('click', function(){
-  stagingArea.innerHTML = ''
+  const confirmation = confirm("Are you sure?");
+  if (confirmation) {
+    stagingArea.innerHTML = ''
+  }
 })
