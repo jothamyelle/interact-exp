@@ -12,19 +12,40 @@ function getTargetMiddle(currentElement) {
 
 function createDeleteButton() {
   const button = document.createElement('button');
-  button.classList.add("deleteControl");
-  button.innerHTML = "Delete";
+  button.classList.add('deleteControl');
+  button.innerHTML = 'Delete';
   return button;
 }
 
 function createDuplicateButton() {
   const button = document.createElement('button');
-  button.classList.add("duplicateControl");
-  button.innerHTML = "Duplicate";
+  button.classList.add('duplicateControl');
+  button.innerHTML = 'Duplicate';
   return button;
 }
 
+function createFormInput(inputType) {
+  if (inputType === 'textarea') {
+    return document.createElement('textarea');
+  }
+  if (inputType === 'select') {
+    return document.createElement('select');
+  }  
+  if (inputType === 'select multiple') {
+    const input = document.createElement('select');
+    input.setAttribute('multiple', '');
+    return input;
+  }
+  const input = document.createElement('input');
+  input.setAttribute('type', inputType);
+  return input;
+}
+
 function turnToFormControl(node) {
+  const inputType = node.dataset.type;
+  // console.log('label:', );
+  node.append(createFormInput(inputType));
+
   const deleteButton = createDeleteButton();
   node.append(deleteButton);
   addDeleteListener(deleteButton);
@@ -133,8 +154,8 @@ function handleDrop(event) {
       removeDragOverClasses(this);
 
       // get rid of the placeholder item
-      if(document.getElementById("beginnerItem")) {
-        document.getElementById("beginnerItem").remove();
+      if(document.getElementById('beginnerItem')) {
+        document.getElementById('beginnerItem').remove();
       }
 
       let stagedRows = document.querySelectorAll('#stagingArea .staged');
@@ -191,7 +212,7 @@ const resetButton = document.getElementById('resetButton');
 const stagingArea = document.getElementById('stagingArea');
 
 resetButton.addEventListener('click', function() {
-  const confirmation = confirm("Are you sure?");
+  const confirmation = confirm('Are you sure?');
   if (confirmation) {
     stagingArea.innerHTML = ''
   }
