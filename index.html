@@ -28,72 +28,87 @@
     </div>
     <div id="options">
       <ul> 
+        <li>Label</li>
         <li>maxlength</li>
         <li>width</li>
         <li>options</li>
-        <li>other stuff</li>
+        <li>Required <input type="checkbox"/></li>
+        <li>Multiple <input type="checkbox"/></li>
+        
       </ul>
     </div>
     <div id="controls">
-                
-        <div class="controls" draggable="true">
+      
+        <div class="controls" draggable="true" title="Form Title">
+            <label>Title</label>
+            <input type="text"/>
+        </div>
+
+        <div class="controls" draggable="true" title="Section Header">
+            <label>Header</label>
+            <input type="text"/>
+        </div>
+  
+        <div class="controls" draggable="true" title="Question or instructions to fill the field">
+            <label>Instructions</label>
+            <input type="text-area"/>
+        </div>
+  
+
+        <div class="controls" draggable="true" title="Checkbox">
           <label>Checkbox</label>
           <input type="checkbox"/>
         </div>
 
-        <div class="controls" draggable="true">
+        <div class="controls" draggable="true" title="Radio Button">
             <label>Radio Button</label>
             <input type="radio"/>
         </div>
   
-        <div class="controls" draggable="true">
+        <div class="controls" draggable="true" title="Select">
             <label>Select</label>
             <select></select>
         </div>
 
-        <div class="controls" draggable="true">
+        <div class="controls" draggable="true" title="Select Multiple">
             <label>Select Multiple</label>
             <select multiple></select>
           </div>
   
-        <div class="controls" draggable="true" >
+        <div class="controls" draggable="true" title="Text">
           <label>Text</label>
           <input type="text" />
         </div>
 
-        <div class="controls" draggable="true" >
+        <div class="controls" draggable="true" title="Text Area">
             <label>Text Area</label>
             <input type="text-area" />
         </div>
 
-        <div class="controls" draggable="true" >
+        <div class="controls" draggable="true" title="Date">
             <label>Date</label>
             <input type="date" />
         </div>
 
-        <div class="controls" draggable="true" >
+        <div class="controls" draggable="true" title="Time">
             <label>Time</label>
             <input type="time" />
         </div>
 
-        <div class="controls" draggable="true" >
+        <div class="controls" draggable="true" title="Number">
             <label>Number</label>
             <input type="Number" />
         </div>
 
-        <div class="controls" draggable="true" >
+        <div class="controls" draggable="true" title="Email">
             <label>Email</label>
             <input type="email" />
         </div>
-  
-  
-  
-  
-  
 
     </div>
   </div>
   <button id="resetButton">Reset</button>
+  <button id="saveButton">Save</button>
   <script src="main.js"></script>
 </body>
 </html>
