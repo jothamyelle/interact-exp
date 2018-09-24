@@ -61,7 +61,7 @@ body {
 }
 
 .staged.over {
-  border: 2px dashed #000;
+  border: 2px dashed #000; 
 }
 
 #controls {

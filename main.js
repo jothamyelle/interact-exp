@@ -78,4 +78,11 @@ var cols = document.querySelectorAll('#controls .controls');
   col.addEventListener('dragend', handleDragEnd, false);
 });
 
-// Comment
+// Reset Button
+
+const resetButton = document.getElementById('resetButton');
+const stagingArea = document.getElementById('stagingArea');
+
+resetButton.addEventListener('click', function(){
+  stagingArea.innerHTML = ''
+})
