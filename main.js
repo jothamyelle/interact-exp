@@ -26,12 +26,12 @@ function handleDragOver(event) {
 
   if(event.clientY < targetMiddle) {
     this.classList.add('over-top');
-    this.classList.remove('over');
-    this.classList.remove('over-bottom');
+    this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;
+    this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
   } else {
     this.classList.add('over-bottom');
-    this.classList.remove('over');
-    this.classList.remove('over-top');
+    this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;
+    this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
   }
   event.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
 
@@ -44,9 +44,9 @@ function handleDragEnter(event) {
 }
 
 function handleDragLeave(event) {
-  this.classList.remove('over');  // this / event.target is previous target element.
-  this.classList.remove('over-top');
-  this.classList.remove('over-bottom');
+  this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;  // this / event.target is previous target element.
+  this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
+  this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
 }
 
 function handleDrop(event) {
@@ -75,19 +75,37 @@ function handleDrop(event) {
         newStagedElement.classList.add('staged');
         newStagedElement.setAttribute('id', idCounter++);
         newStagedElement.style.opacity = '1';
-        this.insertAdjacentElement('afterend', newStagedElement);
-        this.classList.remove('over');
-        this.classList.remove('over-top');
-        this.classList.remove('over-bottom');
+
+        //get some positions for the element you're hovering over
+        let targetPositionYTop = offset(this).top;
+        let targetPositionYBottom = targetPositionYTop + 50;
+        let targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
+
+        if(event.clientY < targetMiddle) {
+          this.insertAdjacentElement('beforebegin', newStagedElement);
+        } else {
+          this.insertAdjacentElement('afterend', newStagedElement);
+        }
+        this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;
+        this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
+        this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
         // get rid of the placeholder item
         if(document.getElementById("beginnerItem")) {
           document.getElementById("beginnerItem").remove();
         }
       } else {
-        this.insertAdjacentElement('afterend', dragSrcEl);
-        this.classList.remove('over');
-        this.classList.remove('over-top');
-        this.classList.remove('over-bottom');
+        //get some positions for the element you're hovering over
+        let targetPositionYTop = offset(this).top;
+        let targetPositionYBottom = targetPositionYTop + 50;
+        let targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
+        if(event.clientY < targetMiddle) {
+          this.insertAdjacentElement('beforebegin', dragSrcEl);
+        } else {
+          this.insertAdjacentElement('afterend', dragSrcEl);
+        }
+        this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;
+        this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
+        this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
       }
 
       let stagedRows = document.querySelectorAll('#stagingArea .staged');
@@ -111,8 +129,8 @@ function handleDragEnd(event) {
 
   [].forEach.call(stagedRows, function (stagedRow) {
     stagedRow.classList.remove('over');
-    this.classList.remove('over-top');
-    this.classList.remove('over-bottom');
+    this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
+    this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
   });
 
   [].forEach.call(controlRows, function (controlRow) {
