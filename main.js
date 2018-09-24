@@ -1,5 +1,53 @@
 let dragSrcEl = null;
+let targetMiddle = 0;
 let idCounter = 0;
+
+// takes the current element and returns it's middle Y value
+function getTargetMiddle(currentElement) {
+  let divHeight = currentElement.offsetHeight;
+  let targetPositionYTop = offset(currentElement).top;
+  let targetPositionYBottom = targetPositionYTop + divHeight;
+  targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
+}
+
+// copies the node being dragged, removes the controls class,
+// adds the staged class, sets the id to a new number, and
+// ensures the opacity goes back to normal
+function duplicateDraggedControl() {
+  let newStagedElement = dragSrcEl.cloneNode(true);
+  newStagedElement.classList.remove('controls');
+  newStagedElement.classList.add('staged');
+  newStagedElement.setAttribute('id', idCounter++);
+  newStagedElement.style.opacity = '1';
+  return newStagedElement;
+}
+
+function handleElementInserts(currentElement, elementToDrop) {
+  if(event.clientY < targetMiddle) {
+    currentElement.insertAdjacentElement('beforebegin', elementToDrop);
+  } else {
+    currentElement.insertAdjacentElement('afterend', elementToDrop);
+  }
+}
+
+// takes the current element and decides where to place to object in
+// staging area, depending on where the border is displaying
+function handleDropPlacement(currentElement) {
+  // check if the drag is happening from controls area, or within the staging area
+  if (dragSrcEl.parentNode.id === 'controls') {
+    let newStagedElement = duplicateDraggedControl();
+    handleElementInserts(currentElement, newStagedElement);
+    
+  } else {
+    handleElementInserts(currentElement, dragSrcEl);
+  }
+}
+
+// removes the irrelevant classes
+function removeDragOverClasses(currentElement) {
+  currentElement.classList && currentElement.classList.contains('over-top') ? currentElement.classList.remove('over-top') : false;
+  currentElement.classList && currentElement.classList.contains('over-bottom') ? currentElement.classList.remove('over-bottom') : false;
+}
 
 function handleDragStart(event) {
   this.style.opacity = '0.4';
@@ -9,8 +57,9 @@ function handleDragStart(event) {
   event.dataTransfer.setData('text/html', this.innerHTML);
 }
 
-function offset(el) {
-  let rect = el.getBoundingClientRect(),
+// gets the current object's location in the window
+function offset(currentElement) {
+  let rect = currentElement.getBoundingClientRect(),
   scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
   scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
@@ -20,9 +69,7 @@ function handleDragOver(event) {
   if (event.preventDefault) {
     event.preventDefault(); // Necessary. Allows us to drop.
   }
-  let targetPositionYTop = offset(this).top;
-  let targetPositionYBottom = targetPositionYTop + 50;
-  let targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
+  getTargetMiddle(this);
 
   if(event.clientY < targetMiddle) {
     this.classList.add('over-top');
@@ -47,59 +94,21 @@ function handleDragLeave(event) {
 
 function handleDrop(event) {
   // this / event.target is current target element.
-  console.log("'this' y location:", event.clientY);
-
   if (event.stopPropagation) {
     // this/event.target is current target element.
-  
     if (event.stopPropagation) {
       event.stopPropagation(); // Stops some browsers from redirecting.
     }
-  
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
-      
-      // use this to check which container the dragged 
-      // element is from: ---> dragSrcEl.parentNode.id
-      
-      // if doesnt exist in the staging area
-      if (dragSrcEl.parentNode.id === 'controls') {
-        // appends the div to the staging area
-        const stagingArea = document.getElementById("stagingArea");
-        let newStagedElement = dragSrcEl.cloneNode(true);
-        newStagedElement.classList.remove('controls');
-        newStagedElement.classList.add('staged');
-        newStagedElement.setAttribute('id', idCounter++);
-        newStagedElement.style.opacity = '1';
+      // deal with the drop placement
+      getTargetMiddle(this);
+      handleDropPlacement(this);
+      removeDragOverClasses(this);
 
-        //get some positions for the element you're hovering over
-        let targetPositionYTop = offset(this).top;
-        let targetPositionYBottom = targetPositionYTop + 50;
-        let targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
-
-        if(event.clientY < targetMiddle) {
-          this.insertAdjacentElement('beforebegin', newStagedElement);
-        } else {
-          this.insertAdjacentElement('afterend', newStagedElement);
-        }
-        this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
-        this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
-        // get rid of the placeholder item
-        if(document.getElementById("beginnerItem")) {
-          document.getElementById("beginnerItem").remove();
-        }
-      } else {
-        //get some positions for the element you're hovering over
-        let targetPositionYTop = offset(this).top;
-        let targetPositionYBottom = targetPositionYTop + 50;
-        let targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
-        if(event.clientY < targetMiddle) {
-          this.insertAdjacentElement('beforebegin', dragSrcEl);
-        } else {
-          this.insertAdjacentElement('afterend', dragSrcEl);
-        }
-        this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
-        this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
+      // get rid of the placeholder item
+      if(document.getElementById("beginnerItem")) {
+        document.getElementById("beginnerItem").remove();
       }
 
       let stagedRows = document.querySelectorAll('#stagingArea .staged');
@@ -122,8 +131,7 @@ function handleDragEnd(event) {
   this.style.opacity = '1';
 
   [].forEach.call(stagedRows, function (stagedRow) {
-    this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
-    this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
+      removeDragOverClasses(this);
   });
 
   [].forEach.call(controlRows, function (controlRow) {
