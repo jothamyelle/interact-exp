@@ -83,9 +83,19 @@ var cols = document.querySelectorAll('#controls .controls');
 const resetButton = document.getElementById('resetButton');
 const stagingArea = document.getElementById('stagingArea');
 
-resetButton.addEventListener('click', function(){
+resetButton.addEventListener('click', function() {
   const confirmation = confirm("Are you sure?");
   if (confirmation) {
     stagingArea.innerHTML = ''
   }
+})
+
+// Delete Buttons
+
+const deleteButtons = document.getElementsByClassName('deleteControl');
+
+Array.prototype.forEach.call(deleteButtons, function(button) {
+  button.addEventListener('click', function() {
+    button.parentElement.remove();
+  })
 })
