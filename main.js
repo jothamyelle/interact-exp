@@ -10,15 +10,41 @@ function getTargetMiddle(currentElement) {
   targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
 }
 
+function createDeleteButton() {
+  const button = document.createElement('button');
+  button.classList.add("deleteControl");
+  button.innerHTML = "Delete";
+  return button;
+}
+
+function createDuplicateButton() {
+  const button = document.createElement('button');
+  button.classList.add("duplicateControl");
+  button.innerHTML = "Duplicate";
+  return button;
+}
+
+function turnToFormControl(node) {
+  const deleteButton = createDeleteButton();
+  node.append(deleteButton);
+  addDeleteListener(deleteButton);
+  const duplicateButton = createDuplicateButton();
+  node.prepend(duplicateButton);
+  addDuplicateListener(duplicateButton);
+  return node;
+}
+
 // copies the node being dragged, removes the controls class,
 // adds the staged class, sets the id to a new number, and
 // ensures the opacity goes back to normal
+
 function duplicateDraggedControl() {
   let newStagedElement = dragSrcEl.cloneNode(true);
   newStagedElement.classList.remove('controls');
   newStagedElement.classList.add('staged');
   newStagedElement.setAttribute('id', idCounter++);
   newStagedElement.style.opacity = '1';
+  turnToFormControl(newStagedElement);
   return newStagedElement;
 }
 
