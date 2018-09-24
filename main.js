@@ -209,6 +209,26 @@ var controlRows = document.querySelectorAll('#controls .controls');
   controlRow.addEventListener('dragend', handleDragEnd, false);
 });
 
+//  Beginner item
+
+// {/* <div id="beginnerItem" class="staged">Drop Stuff Here</div> */}
+
+function createbeginnerItem() {
+  beginnerItem = document.createElement('div');
+  beginnerItem.setAttribute('id', 'beginnerItem');
+  beginnerItem.classList.add('staged');
+  beginnerItem.textContent = 'Drop Stuff Here';
+  beginnerItem.addEventListener('dragstart', handleDragStart, false);
+  beginnerItem.addEventListener('dragenter', handleDragEnter, false);
+  beginnerItem.addEventListener('dragover', handleDragOver, false);
+  beginnerItem.addEventListener('dragleave', handleDragLeave, false);
+  beginnerItem.addEventListener('drop', handleDrop, false);
+  beginnerItem.addEventListener('dragend', handleDragEnd, false);
+
+  
+  return beginnerItem;
+}
+
 
 // Reset Button
 
@@ -218,7 +238,8 @@ const stagingArea = document.getElementById('stagingArea');
 resetButton.addEventListener('click', function() {
   const confirmation = confirm('Are you sure?');
   if (confirmation) {
-    stagingArea.innerHTML = ''
+    stagingArea.innerHTML = '';
+    stagingArea.append(createbeginnerItem());
   }
 })
 
