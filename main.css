@@ -110,3 +110,13 @@ body {
   width:100%;
   list-style: none;
 }
+
+.deleteControl {
+  float: right;
+  border-top-right-radius: 10px;
+}
+
+.duplicateControl {
+  float: left;
+  border-top-left-radius: 10px;
+}

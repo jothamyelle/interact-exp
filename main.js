@@ -157,3 +157,55 @@ var controlRows = document.querySelectorAll('#controls .controls');
   controlRow.addEventListener('drop', handleDrop, false);
   controlRow.addEventListener('dragend', handleDragEnd, false);
 });
+
+
+// Reset Button
+
+const resetButton = document.getElementById('resetButton');
+const stagingArea = document.getElementById('stagingArea');
+
+resetButton.addEventListener('click', function() {
+  const confirmation = confirm("Are you sure?");
+  if (confirmation) {
+    stagingArea.innerHTML = ''
+  }
+})
+
+// Control Handlers
+
+// Helpers
+
+function addDeleteListener(button) {
+  button.addEventListener('click', function() {
+    button.parentElement.remove();
+  })
+}
+
+function addDuplicateListener(button) {
+  button.addEventListener('click', function() {
+    const control = button.parentElement;
+    const clone = control.cloneNode(true);
+    const cloneDelete = clone.getElementsByClassName('deleteControl')[0];
+    addDeleteListener(cloneDelete);
+    const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
+    addDuplicateListener(cloneDuplicate);
+    control.parentElement.insertBefore(clone, control);
+  })
+}
+
+
+// Delete Buttons
+
+const deleteButtons = document.getElementsByClassName('deleteControl');
+
+Array.prototype.forEach.call(deleteButtons, function(button) {
+  addDeleteListener(button);
+})
+
+// Duplicate Buttons
+
+const duplicateButtons = document.getElementsByClassName('duplicateControl');
+
+Array.prototype.forEach.call(duplicateButtons, function(button) {
+  addDuplicateListener(button);
+})
