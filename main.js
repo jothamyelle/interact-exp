@@ -47,16 +47,25 @@ function handleDrop(event) {
       // if doesnt exist in the staging area
       if (dragSrcEl.parentNode.id === 'controls') {
         // appends the div to the staging area
+
+        //check if the staging area has more than one element
+        // if it does, delete the first one
+        let stagedItems = document.querySelectorAll("#stagingArea .staged");
+        if(document.getElementById("beginnerItem")) {
+          document.getElementById("beginnerItem").remove();
+        }
         const stagingArea = document.getElementById("stagingArea");
         let newStagedElement = dragSrcEl.cloneNode(true);
         newStagedElement.classList.remove('controls');
         newStagedElement.classList.add('staged');
         newStagedElement.setAttribute('id', idCounter++);
+        newStagedElement.style.opacity = '1';
         stagingArea.appendChild(newStagedElement);
+        this.classList.remove('over');
       } else {
         this.insertAdjacentElement('afterend', dragSrcEl);
+        this.classList.remove('over');
       }
-      // if exists then move it
 
       let stagedRows = document.querySelectorAll('#stagingArea .staged');
       [].forEach.call(stagedRows, function(stagedRow) {
@@ -67,8 +76,6 @@ function handleDrop(event) {
         stagedRow.addEventListener('drop', handleDrop, false);
         stagedRow.addEventListener('dragend', handleDragEnd, false);
       });
-      // dragSrcEl.innerHTML = this.innerHTML;
-      // this.innerHTML = event.dataTransfer.getData('text/html');
     }
   
     return false;
