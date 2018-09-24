@@ -73,10 +73,6 @@ body {
   border-bottom: 2px dashed #000;
 }
 
-.staged.over {
-  border: 2px dashed #000;
-}
-
 #controls {
   border-left:solid black 1px;
   padding: 10px;

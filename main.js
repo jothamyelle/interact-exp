@@ -26,11 +26,9 @@ function handleDragOver(event) {
 
   if(event.clientY < targetMiddle) {
     this.classList.add('over-top');
-    this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;
     this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
   } else {
     this.classList.add('over-bottom');
-    this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;
     this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
   }
   event.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
@@ -40,11 +38,9 @@ function handleDragOver(event) {
 
 function handleDragEnter(event) {
   // this / event.target is the current hover target.
-  this.classList.add('over');
 }
 
 function handleDragLeave(event) {
-  this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;  // this / event.target is previous target element.
   this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
   this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
 }
@@ -86,7 +82,6 @@ function handleDrop(event) {
         } else {
           this.insertAdjacentElement('afterend', newStagedElement);
         }
-        this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;
         this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
         this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
         // get rid of the placeholder item
@@ -103,7 +98,6 @@ function handleDrop(event) {
         } else {
           this.insertAdjacentElement('afterend', dragSrcEl);
         }
-        this.classList && this.classList.contains('over') ? this.classList.remove('over') : false;
         this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
         this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
       }
@@ -128,13 +122,11 @@ function handleDragEnd(event) {
   this.style.opacity = '1';
 
   [].forEach.call(stagedRows, function (stagedRow) {
-    stagedRow.classList.remove('over');
     this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
     this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
   });
 
   [].forEach.call(controlRows, function (controlRow) {
-    controlRow.classList.remove('over');
   });
 }
 
