@@ -21,6 +21,11 @@ body {
   -khtml-user-drag: element;
   -webkit-user-drag: element;
 }
+
+#stagingArea {
+  min-width: 400px
+}
+
 .staged {
   height: 50px;
   width: 350px;
@@ -60,6 +65,14 @@ body {
   border-top-right-radius: 10px;
 }
 
+.staged.over-top {
+  border-top: 2px dashed #000;
+}
+
+.staged.over-bottom {
+  border-bottom: 2px dashed #000;
+}
+
 .staged.over {
   border: 2px dashed #000;
 }
@@ -86,7 +99,8 @@ body {
 }
 
 #options {
-  padding:10px;
+  padding:5px;
+  border-left:solid black 1px;
 }
 
 #options li {

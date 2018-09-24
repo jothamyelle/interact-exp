@@ -1,3 +1,5 @@
+let dragSrcEl = null;
+
 function handleDragStart(event) {
   dragSrcEl = this;
 
@@ -17,6 +19,7 @@ function handleDragOver(event) {
 
 function handleDragEnter(event) {
   // this / event.target is the current hover target.
+  console.log("this:", this);
   this.classList.add('over');
 }
 
@@ -36,13 +39,23 @@ function handleDrop(event) {
   
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
-      // Set the source column's HTML to the HTML of the column we dropped on.
-      dragSrcEl.innerHTML = this.innerHTML;
-      this.innerHTML = event.dataTransfer.getData('text/html');
-      // if the element is in the top half of the staged element
-        // append it to the staging area above the staged element
-      // if in bottom half
-        // append to staging area below staged element
+      // appends the div to the staging area
+      const stagingArea = document.getElementById("stagingArea");
+      let newStagedElement = dragSrcEl.cloneNode(true);
+      newStagedElement.classList.add("staged");
+      stagingArea.appendChild(newStagedElement);
+
+      let stagedRows = document.querySelectorAll('#stagingArea .staged');
+      [].forEach.call(stagedRows, function(stagedRow) {
+        stagedRow.addEventListener('dragstart', handleDragStart, false);
+        stagedRow.addEventListener('dragenter', handleDragEnter, false);
+        stagedRow.addEventListener('dragover', handleDragOver, false);
+        stagedRow.addEventListener('dragleave', handleDragLeave, false);
+        stagedRow.addEventListener('drop', handleDrop, false);
+        stagedRow.addEventListener('dragend', handleDragEnd, false);
+      });
+      // dragSrcEl.innerHTML = this.innerHTML;
+      // this.innerHTML = event.dataTransfer.getData('text/html');
     }
   
     return false;
@@ -52,28 +65,33 @@ function handleDrop(event) {
 function handleDragEnd(event) {
   // this/event.target is the source nodevent.
 
-  [].forEach.call(cols, function (col) {
-    col.classList.remove('over');
+  [].forEach.call(stagedRows, function (stagedRow) {
+    stagedRow.classList.remove('over');
+  });
+
+  [].forEach.call(controlRows, function (controlRow) {
+    controlRow.classList.remove('over');
   });
 }
 
-
-var cols = document.querySelectorAll('#stagingArea .staged');
-[].forEach.call(cols, function(col) {
-  col.addEventListener('dragstart', handleDragStart, false);
-  col.addEventListener('dragenter', handleDragEnter, false);
-  col.addEventListener('dragover', handleDragOver, false);
-  col.addEventListener('dragleave', handleDragLeave, false);
-  col.addEventListener('drop', handleDrop, false);
-  col.addEventListener('dragend', handleDragEnd, false);
+let stagedRows = document.querySelectorAll('#stagingArea .staged');
+[].forEach.call(stagedRows, function(stagedRow) {
+  stagedRow.addEventListener('dragstart', handleDragStart, false);
+  stagedRow.addEventListener('dragenter', handleDragEnter, false);
+  stagedRow.addEventListener('dragover', handleDragOver, false);
+  stagedRow.addEventListener('dragleave', handleDragLeave, false);
+  stagedRow.addEventListener('drop', handleDrop, false);
+  stagedRow.addEventListener('dragend', handleDragEnd, false);
 });
 
-var cols = document.querySelectorAll('#controls .controls');
-[].forEach.call(cols, function(col) {
-  col.addEventListener('dragstart', handleDragStart, false);
-  col.addEventListener('dragenter', handleDragEnter, false);
-  col.addEventListener('dragover', handleDragOver, false);
-  col.addEventListener('dragleave', handleDragLeave, false);
-  col.addEventListener('drop', handleDrop, false);
-  col.addEventListener('dragend', handleDragEnd, false);
+let stagingArea = document.querySelector('#stagingArea');
+
+var controlRows = document.querySelectorAll('#controls .controls');
+[].forEach.call(controlRows, function(controlRow) {
+  controlRow.addEventListener('dragstart', handleDragStart, false);
+  controlRow.addEventListener('dragenter', handleDragEnter, false);
+  controlRow.addEventListener('dragover', handleDragOver, false);
+  controlRow.addEventListener('dragleave', handleDragLeave, false);
+  controlRow.addEventListener('drop', handleDrop, false);
+  controlRow.addEventListener('dragend', handleDragEnd, false);
 });
