@@ -70,6 +70,8 @@ function turnToFormControl(node) {
   const duplicateButton = createDuplicateButton();
   node.prepend(duplicateButton);
   addDuplicateListener(duplicateButton);
+
+  controlClickDisplayOptions(node);
   
   return node;
 }
@@ -231,24 +233,24 @@ function updateCheckboxOption(currentElement, option, index) {
 
 function displayAppropriateOptions(elementObject) {
   let htmlToDisplay = "";
-  console.log(elementObject.type);
+  // console.log(elementObject)
   switch(elementObject.type) {
     case 'title':
     htmlToDisplay += `
       <label>Form Title</label>
-      <input type="text" class="formTitleValue"/>
+      <input type="text" class="formTitleValue" value="${elementObject.value}"/>
     `;
     break;
     case 'header':
     htmlToDisplay += `
       <label>Section Header</label>
-      <input type="text" class="headerValue"/>
+      <input type="text" class="headerValue" value="${elementObject.value}"/>
     `;
     break;
     case 'paragraph':
     htmlToDisplay += `
       <label>Instructions or Question</label>
-      <textarea class="formTitleValue"/>
+      <textarea class="instructionsValue"/>${elementObject.value}</textarea
     `;
     break;
     case 'checkbox':
@@ -260,7 +262,7 @@ function displayAppropriateOptions(elementObject) {
       <input type="text" class="checkboxOption"/>
       <input type="text" class="checkboxOption"/>
       <label>Required</label>
-      <input type="checkbox" class="radioRequired"/>
+      <input type="checkbox" class="checkRequired"/>
       `;
     break;
     case 'radio':
@@ -371,14 +373,27 @@ function displayAppropriateOptions(elementObject) {
 
   }
   let optionsList = document.getElementById('optionsList');
+  optionsList.innerHTML = '';
   optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
   Array.from(document.getElementsByClassName('checkboxOption')).forEach(function(option, index) {
     option.addEventListener('keyup', event => {
       listOfDisplayOptions[elementObject.id].checkOptions.push(option.value);
       updateCheckboxOption(elementObject, option, index);
     });
- });
+  });
+  addOptionListeners('formTitleValue', elementObject, 'value');
+  addOptionListeners('headerValue', elementObject, 'value');
+  addOptionListeners('instructionsValue', elementObject, 'value');
+  
+}
 
+function addOptionListeners(className, elementObject, prop) {
+  Array.from(document.getElementsByClassName(className)).forEach(function (element) {
+    element.addEventListener('keyup', function() {
+      console.log(listOfDisplayOptions[elementObject.id])
+      listOfDisplayOptions[elementObject.id][prop] = element[prop];
+    })
+  })
 }
 
 // takes the current element and decides where to place to object in
@@ -393,6 +408,12 @@ function handleDropPlacement(currentElement) {
   } else {
     handleElementInserts(currentElement, dragSrcEl);
   }
+}
+
+function controlClickDisplayOptions(node) {
+  node.addEventListener('click', function() {
+    displayAppropriateOptions(listOfDisplayOptions[node.id]);
+  })
 }
 
 // removes the irrelevant classes
