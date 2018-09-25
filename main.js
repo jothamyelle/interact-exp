@@ -92,7 +92,7 @@ var controlRows = document.querySelectorAll('#controls .controls');
 function addSaveButtonListener() {
   const saveButton = document.getElementById('saveButton');
   const savedFormTemplate = [];
-  saveButton.addEventListener('click', function() {
+  saveButton.addEventListener('click', function() { 
  
     const controls = stagingArea.getElementsByClassName('staged');
     Array.prototype.forEach.call(controls, function(control) {
