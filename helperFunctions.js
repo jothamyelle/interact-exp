@@ -414,7 +414,9 @@ function addDeleteListener(button) {
   button.addEventListener('click', function() {
     button.parentElement.remove();
     if(!stagingArea.innerHTML.trim()) {
-      stagingArea.append(createbeginnerItem());
+      const beginnerItem = createbeginnerItem(); 
+      stagingArea.append(beginnerItem);
+      addAllEventListeners(beginnerItem);
     }
   })
 }
