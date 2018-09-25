@@ -261,11 +261,21 @@ function addDuplicateListener(button) {
   button.addEventListener('click', function() {
     const control = button.parentElement;
     const clone = control.cloneNode(true);
+    
     const cloneDelete = clone.getElementsByClassName('deleteControl')[0];
     addDeleteListener(cloneDelete);
+    
     const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
     addDuplicateListener(cloneDuplicate);
     control.parentElement.insertBefore(clone, control);
+
+    clone.addEventListener('dragstart', handleDragStart, false);
+    clone.addEventListener('dragenter', handleDragEnter, false);
+    clone.addEventListener('dragover', handleDragOver, false);
+    clone.addEventListener('dragleave', handleDragLeave, false);
+    clone.addEventListener('drop', handleDrop, false);
+    clone.addEventListener('dragend', handleDragEnd, false);
+
   })
 }
 
