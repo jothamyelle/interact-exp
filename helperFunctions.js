@@ -95,3 +95,50 @@ function removeDragOverClasses(currentElement) {
   currentElement.classList && currentElement.classList.contains('over-top') ? currentElement.classList.remove('over-top') : false;
   currentElement.classList && currentElement.classList.contains('over-bottom') ? currentElement.classList.remove('over-bottom') : false;
 }
+
+function createbeginnerItem() {
+  beginnerItem = document.createElement('div');
+  beginnerItem.setAttribute('id', 'beginnerItem');
+  beginnerItem.classList.add('staged');
+  beginnerItem.textContent = 'Drop Stuff Here';
+  beginnerItem.addEventListener('dragstart', handleDragStart, false);
+  beginnerItem.addEventListener('dragenter', handleDragEnter, false);
+  beginnerItem.addEventListener('dragover', handleDragOver, false);
+  beginnerItem.addEventListener('dragleave', handleDragLeave, false);
+  beginnerItem.addEventListener('drop', handleDrop, false);
+  beginnerItem.addEventListener('dragend', handleDragEnd, false);
+
+  return beginnerItem;
+}
+
+function addDeleteListener(button) {
+  button.addEventListener('click', function() {
+    button.parentElement.remove();
+    console.log('The staging area is', stagingArea.innerHTML);
+    if(!stagingArea.innerHTML.trim()) {
+      stagingArea.append(createbeginnerItem());
+    }
+  })
+}
+
+function addDuplicateListener(button) {
+  button.addEventListener('click', function() {
+    const control = button.parentElement;
+    const clone = control.cloneNode(true);
+    
+    const cloneDelete = clone.getElementsByClassName('deleteControl')[0];
+    addDeleteListener(cloneDelete);
+    
+    const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
+    addDuplicateListener(cloneDuplicate);
+    control.parentElement.insertBefore(clone, control);
+
+    clone.addEventListener('dragstart', handleDragStart, false);
+    clone.addEventListener('dragenter', handleDragEnter, false);
+    clone.addEventListener('dragover', handleDragOver, false);
+    clone.addEventListener('dragleave', handleDragLeave, false);
+    clone.addEventListener('drop', handleDrop, false);
+    clone.addEventListener('dragend', handleDragEnd, false);
+
+  })
+}

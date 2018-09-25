@@ -111,27 +111,6 @@ var controlRows = document.querySelectorAll('#controls .controls');
   controlRow.addEventListener('dragend', handleDragEnd, false);
 });
 
-//  Beginner item
-
-// {/* <div id="beginnerItem" class="staged">Drop Stuff Here</div> */}
-
-function createbeginnerItem() {
-  beginnerItem = document.createElement('div');
-  beginnerItem.setAttribute('id', 'beginnerItem');
-  beginnerItem.classList.add('staged');
-  beginnerItem.textContent = 'Drop Stuff Here';
-  beginnerItem.addEventListener('dragstart', handleDragStart, false);
-  beginnerItem.addEventListener('dragenter', handleDragEnter, false);
-  beginnerItem.addEventListener('dragover', handleDragOver, false);
-  beginnerItem.addEventListener('dragleave', handleDragLeave, false);
-  beginnerItem.addEventListener('drop', handleDrop, false);
-  beginnerItem.addEventListener('dragend', handleDragEnd, false);
-
-  
-  return beginnerItem;
-}
-
-
 // Reset Button
 
 const resetButton = document.getElementById('resetButton');
@@ -144,43 +123,6 @@ resetButton.addEventListener('click', function() {
     stagingArea.append(createbeginnerItem());
   }
 })
-
-// Control Handlers
-
-// Helpers
-
-function addDeleteListener(button) {
-  button.addEventListener('click', function() {
-    button.parentElement.remove();
-    console.log('The staging area is', stagingArea.innerHTML);
-    if(!stagingArea.innerHTML.trim()) {
-      stagingArea.append(createbeginnerItem());
-    }
-  })
-}
-
-function addDuplicateListener(button) {
-  button.addEventListener('click', function() {
-    const control = button.parentElement;
-    const clone = control.cloneNode(true);
-    
-    const cloneDelete = clone.getElementsByClassName('deleteControl')[0];
-    addDeleteListener(cloneDelete);
-    
-    const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
-    addDuplicateListener(cloneDuplicate);
-    control.parentElement.insertBefore(clone, control);
-
-    clone.addEventListener('dragstart', handleDragStart, false);
-    clone.addEventListener('dragenter', handleDragEnter, false);
-    clone.addEventListener('dragover', handleDragOver, false);
-    clone.addEventListener('dragleave', handleDragLeave, false);
-    clone.addEventListener('drop', handleDrop, false);
-    clone.addEventListener('dragend', handleDragEnd, false);
-
-  })
-}
-
 
 // Delete Buttons
 
