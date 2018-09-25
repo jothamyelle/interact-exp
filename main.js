@@ -87,6 +87,15 @@ var controlRows = document.querySelectorAll('#controls .controls');
   addAllEventListeners(controlRow);
 });
 
+// Save Button
+
+const saveButton = document.getElementById('saveButton');
+
+saveButton.addEventListener('click', function() {
+  console.log('Inside the staging area:', stagingArea.innerHTML);
+  
+})
+
 addResetButtonListener();
 addDeleteButtonListener();
 addDuplicateButtonListener();
