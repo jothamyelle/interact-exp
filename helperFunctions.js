@@ -231,7 +231,26 @@ function updateCheckboxOption(currentElement, option, index) {
 
 function displayAppropriateOptions(elementObject) {
   let htmlToDisplay = "";
+  console.log(elementObject.type);
   switch(elementObject.type) {
+    case 'title':
+    htmlToDisplay += `
+      <label>Form Title</label>
+      <input type="text" class="formTitleValue"/>
+    `;
+    break;
+    case 'header':
+    htmlToDisplay += `
+      <label>Section Header</label>
+      <input type="text" class="headerValue"/>
+    `;
+    break;
+    case 'paragraph':
+    htmlToDisplay += `
+      <label>Instructions or Question</label>
+      <textarea class="formTitleValue"/>
+    `;
+    break;
     case 'checkbox':
       htmlToDisplay += `
       <label>Label</label>
@@ -240,13 +259,116 @@ function displayAppropriateOptions(elementObject) {
       <input type="text" class="checkboxOption"/>
       <input type="text" class="checkboxOption"/>
       <input type="text" class="checkboxOption"/>
-      <p>Required?</p>
-      <input type="radio" name="requiredRadio" value="Yes"/>
-      <label>Yes</label><br/>
-      <input type="radio" name="requiredRadio" value="No"/>
-      <label>No</label>
+      <label>Required</label>
+      <input type="checkbox" class="radioRequired"/>
       `;
     break;
+    case 'radio':
+    htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="radioLabel"/>
+      <label>radio Multiple Options</label>
+      <input type="text" class="radioOption"/>
+      <input type="text" class="radioOption"/>
+      <input type="text" class="radioOption"/>
+      <label>Required</label>
+      <input type="checkbox" class="radioRequired"/>
+      `;
+    break;
+    case 'select':
+    htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="selectLabel"/>
+      <label>Select Multiple Options</label>
+      <input type="text" class="selectOption"/>
+      <input type="text" class="selectOption"/>
+      <input type="text" class="selectOption"/>
+      <label>Required</label>
+      <input type="checkbox" class="selectRequired"/>
+      `;
+    break;
+    case 'selectMultiple':
+    htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="selectMultipleLabel"/>
+      <label>Select Multiple Options</label>
+      <input type="text" class="selectMultipleOption"/>
+      <input type="text" class="selectMultipleOption"/>
+      <input type="text" class="selectMultipleOption"/>
+      <label>Required</label>
+      <input type="checkbox" class="selectMultipleRequired"/>
+      `;
+    break;
+    case 'text':
+    htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="textLabel"/>
+      <label>Placeholder</label>
+      <input type="text" class="textPlaceholder"/>
+      <label>Required</label>
+      <input type="checkbox" class="textRequired"/>
+      <label>Maximum Length</label>
+      <input type="number" class="textMaxlength" value="254"/>
+      `;
+    break;
+    case 'textarea':
+    htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="textareaLabel"/>
+      <label>Placeholder</label>
+      <input type="text" class="textareaPlaceholder"/>
+      <label>Required</label>
+      <input type="checkbox" class="textareaRequired"/>
+      <label>Maximum Length</label>
+      <input type="number" class="textareaMaxlength" value="254"/>
+      `;
+    break;
+    case 'date':
+    htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="dateLabel"/>
+      <label>Placeholder</label>
+      <input type="date" class="datePlaceholder"/>
+      <label>Required</label>
+      <input type="checkbox" class="dateRequired"/>
+      `;
+    break;
+    case 'time':
+    htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="timeLabel"/>
+      <label>Placeholder</label>
+      <input type="time" class="timePlaceholder"/>
+      <label>Required</label>
+      <input type="checkbox" class="timeRequired"/>
+      `;
+    break;
+    case 'number':
+    htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="numberLabel"/>
+      <label>Placeholder</label>
+      <input type="number" class="numberPlaceholder"/>
+      <label>Required</label>
+      <input type="checkbox" class="numberRequired"/>
+      <label>Maximum Length</label>
+      <input type="number" class="numberMaxlength" value="254"/>
+      `;
+    break;
+    case 'email':
+      htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="emailLabel"/>
+      <label>Placeholder</label>
+      <input type="text" class="emailPlaceholder"/>
+      <label>Required</label>
+      <input type="checkbox" class="emailRequired"/>
+      <label>Maximum Length</label>
+      <input type="number" class="emailMaxlength" value="254"/>
+      `;
+    break;
+    
+
   }
   let optionsList = document.getElementById('optionsList');
   optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
