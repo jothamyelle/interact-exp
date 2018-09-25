@@ -1,9 +1,26 @@
+// gets the current object's location in the window
+function offset(currentElement) {
+  let rect = currentElement.getBoundingClientRect(),
+  scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+  scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+}
+
 // takes the current element and returns it's middle Y value
 function getTargetMiddle(currentElement) {
   let divHeight = currentElement.offsetHeight;
   let targetPositionYTop = offset(currentElement).top;
   let targetPositionYBottom = targetPositionYTop + divHeight;
   targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
+}
+
+function addAllEventListeners(currentElement) {
+  currentElement.addEventListener('dragstart', handleDragStart, false);
+  currentElement.addEventListener('dragenter', handleDragEnter, false);
+  currentElement.addEventListener('dragover', handleDragOver, false);
+  currentElement.addEventListener('dragleave', handleDragLeave, false);
+  currentElement.addEventListener('drop', handleDrop, false);
+  currentElement.addEventListener('dragend', handleDragEnd, false);
 }
 
 // Change Option to form control
@@ -101,12 +118,7 @@ function createbeginnerItem() {
   beginnerItem.setAttribute('id', 'beginnerItem');
   beginnerItem.classList.add('staged');
   beginnerItem.textContent = 'Drop Stuff Here';
-  beginnerItem.addEventListener('dragstart', handleDragStart, false);
-  beginnerItem.addEventListener('dragenter', handleDragEnter, false);
-  beginnerItem.addEventListener('dragover', handleDragOver, false);
-  beginnerItem.addEventListener('dragleave', handleDragLeave, false);
-  beginnerItem.addEventListener('drop', handleDrop, false);
-  beginnerItem.addEventListener('dragend', handleDragEnd, false);
+  addAllEventListeners(beginnerItem);
 
   return beginnerItem;
 }
@@ -131,14 +143,40 @@ function addDuplicateListener(button) {
     
     const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
     addDuplicateListener(cloneDuplicate);
-    control.parentElement.insertBefore(clone, control);
+    clone.setAttribute('id', idCounter++)
+    control.insertAdjacentElement('afterend', clone);
+    addAllEventListeners(clone);
+  })
+}
 
-    clone.addEventListener('dragstart', handleDragStart, false);
-    clone.addEventListener('dragenter', handleDragEnter, false);
-    clone.addEventListener('dragover', handleDragOver, false);
-    clone.addEventListener('dragleave', handleDragLeave, false);
-    clone.addEventListener('drop', handleDrop, false);
-    clone.addEventListener('dragend', handleDragEnd, false);
+// Reset Button
+function addResetButtonListener(){
+  const resetButton = document.getElementById('resetButton');
+  const stagingArea = document.getElementById('stagingArea');
+  
+  resetButton.addEventListener('click', function() {
+    const confirmation = confirm('Are you sure?');
+    if (confirmation) {
+      stagingArea.innerHTML = '';
+      stagingArea.append(createbeginnerItem());
+    }
+  })
+}
 
+// Delete Buttons
+function addDeleteButtonListener(){
+  const deleteButtons = document.getElementsByClassName('deleteControl');
+  
+  Array.prototype.forEach.call(deleteButtons, function(button) {
+    addDeleteListener(button);
+  })
+}
+
+// Duplicate Buttons
+function addDuplicateButtonListener(){
+  const duplicateButtons = document.getElementsByClassName('duplicateControl');
+  
+  Array.prototype.forEach.call(duplicateButtons, function(button) {
+    addDuplicateListener(button);
   })
 }
