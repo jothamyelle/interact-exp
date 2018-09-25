@@ -10,14 +10,6 @@ function handleDragStart(event) {
   event.dataTransfer.setData('text/html', this.innerHTML);
 }
 
-// gets the current object's location in the window
-function offset(currentElement) {
-  let rect = currentElement.getBoundingClientRect(),
-  scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-  scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
-}
-
 function handleDragOver(event) {
   if (event.preventDefault) {
     event.preventDefault(); // Necessary. Allows us to drop.
@@ -41,8 +33,7 @@ function handleDragEnter(event) {
 }
 
 function handleDragLeave(event) {
-  this.classList && this.classList.contains('over-top') ? this.classList.remove('over-top') : false;
-  this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
+  removeDragOverClasses(this);
 }
 
 function handleDrop(event) {
@@ -66,12 +57,7 @@ function handleDrop(event) {
 
       let stagedRows = document.querySelectorAll('#stagingArea .staged');
       [].forEach.call(stagedRows, function(stagedRow) {
-        stagedRow.addEventListener('dragstart', handleDragStart, false);
-        stagedRow.addEventListener('dragenter', handleDragEnter, false);
-        stagedRow.addEventListener('dragover', handleDragOver, false);
-        stagedRow.addEventListener('dragleave', handleDragLeave, false);
-        stagedRow.addEventListener('drop', handleDrop, false);
-        stagedRow.addEventListener('dragend', handleDragEnd, false);
+        addAllEventListeners(stagedRow);
       });
     }
   
@@ -93,49 +79,14 @@ function handleDragEnd(event) {
 
 let stagedRows = document.querySelectorAll('#stagingArea .staged');
 [].forEach.call(stagedRows, function(stagedRow) {
-  stagedRow.addEventListener('dragstart', handleDragStart, false);
-  stagedRow.addEventListener('dragenter', handleDragEnter, false);
-  stagedRow.addEventListener('dragover', handleDragOver, false);
-  stagedRow.addEventListener('dragleave', handleDragLeave, false);
-  stagedRow.addEventListener('drop', handleDrop, false);
-  stagedRow.addEventListener('dragend', handleDragEnd, false);
+  addAllEventListeners(stagedRow);
 });
 
 var controlRows = document.querySelectorAll('#controls .controls');
 [].forEach.call(controlRows, function(controlRow) {
-  controlRow.addEventListener('dragstart', handleDragStart, false);
-  controlRow.addEventListener('dragenter', handleDragEnter, false);
-  controlRow.addEventListener('dragover', handleDragOver, false);
-  controlRow.addEventListener('dragleave', handleDragLeave, false);
-  controlRow.addEventListener('drop', handleDrop, false);
-  controlRow.addEventListener('dragend', handleDragEnd, false);
+  addAllEventListeners(controlRow);
 });
 
-// Reset Button
-
-const resetButton = document.getElementById('resetButton');
-const stagingArea = document.getElementById('stagingArea');
-
-resetButton.addEventListener('click', function() {
-  const confirmation = confirm('Are you sure?');
-  if (confirmation) {
-    stagingArea.innerHTML = '';
-    stagingArea.append(createbeginnerItem());
-  }
-})
-
-// Delete Buttons
-
-const deleteButtons = document.getElementsByClassName('deleteControl');
-
-Array.prototype.forEach.call(deleteButtons, function(button) {
-  addDeleteListener(button);
-})
-
-// Duplicate Buttons
-
-const duplicateButtons = document.getElementsByClassName('duplicateControl');
-
-Array.prototype.forEach.call(duplicateButtons, function(button) {
-  addDuplicateListener(button);
-})
+addResetButtonListener();
+addDeleteButtonListener();
+addDuplicateButtonListener();
