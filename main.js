@@ -124,6 +124,16 @@ resetButton.addEventListener('click', function() {
   }
 })
 
+// Save Button
+
+const saveButton = document.getElementById('saveButton');
+
+saveButton.addEventListener('click', function() {
+  console.log('Inside the staging area:', stagingArea.innerHTML);
+  
+})
+
+
 // Delete Buttons
 
 const deleteButtons = document.getElementsByClassName('deleteControl');
