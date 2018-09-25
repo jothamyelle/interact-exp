@@ -1,6 +1,7 @@
 let dragSrcEl = null;
 let targetMiddle = 0;
 let idCounter = 0;
+let listOfDisplayOptions = {};
 
 function handleDragStart(event) {
   this.style.opacity = '0.4';
@@ -39,10 +40,8 @@ function handleDragLeave(event) {
 function handleDrop(event) {
   // this / event.target is current target element.
   if (event.stopPropagation) {
-    // this/event.target is current target element.
-    if (event.stopPropagation) {
-      event.stopPropagation(); // Stops some browsers from redirecting.
-    }
+    event.stopPropagation(); // Stops some browsers from redirecting.
+    
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
       // deal with the drop placement
@@ -71,9 +70,6 @@ function handleDragEnd(event) {
 
   [].forEach.call(stagedRows, function (stagedRow) {
       removeDragOverClasses(this);
-  });
-
-  [].forEach.call(controlRows, function (controlRow) {
   });
 }
 

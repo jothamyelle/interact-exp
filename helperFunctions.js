@@ -94,6 +94,169 @@ function handleElementInserts(currentElement, elementToDrop) {
   }
 }
 
+function createAppropriateOptionsList(currentElement) {
+  let options = {};
+
+  // check the current element's title to see what type of input it is
+  // and change the options accordingly
+  switch(currentElement.title)  {
+    case 'Form Title':
+      options = {
+        id: currentElement.id,
+        type: 'title',
+        value: ''
+      }
+    break;
+    case 'Section Header':
+      options = {
+        id: currentElement.id,
+        type: 'header',
+        value: ''
+      }
+    break;
+    case 'Question or instructions to fill the field':
+      options = {
+        id: currentElement.id,
+        type: 'paragraph',
+        value: ''
+      }
+    break;
+    case 'Checkbox':
+      options = {
+        id: currentElement.id,
+        type: 'checkbox',
+        label: '',
+        checkOptions: [],
+        required: false
+      }
+    break;
+    case 'Radio Button':
+      options = {
+        id: currentElement.id,
+        type: 'radio',
+        label: '',
+        radioOptions: [],
+        required: false
+      }
+    break;
+    case 'Select':
+      options = {
+        id: currentElement.id,
+        type: 'select',
+        label: '',
+        selectOptions: [],
+        required: false
+      }
+    break;
+    case 'Select Multiple':
+      options = {
+        id: currentElement.id,
+        type: 'selectMultiple',
+        label: '',
+        selectMultipleOptions: [],
+        required: false,
+        multiple: true
+      }
+    break;
+    case 'Text':
+      options = {
+        id: currentElement.id,
+        type: 'text',
+        label: '',
+        maxlength: 1000,
+        required: false,
+        placeholder: ''
+      }
+    break;
+    case 'Text Area':
+      options = {
+        id: currentElement.id,
+        type: 'textarea',
+        label: '',
+        maxlength: 1000,
+        required: false,
+        placeholder: ''
+      }
+    break;
+    case 'Date':
+      options = {
+        id: currentElement.id,
+        type: 'date',
+        label: '',
+        required: false
+      }
+    break;
+    case 'Time':
+      options = {
+        id: currentElement.id,
+        type: 'time',
+        label: '',
+        required: false
+      }
+    break;
+    case 'Number':
+      options = {
+        id: currentElement.id,
+        type: 'number',
+        label: '',
+        required: false,
+        placeholder: ''
+      }
+    break;
+    case 'Email':
+      options = {
+        id: currentElement.id,
+        type: 'email',
+        label: '',
+        required: false,
+        placeholder: ''
+      }
+    break;
+  }
+
+  listOfDisplayOptions[currentElement.id] = options;
+}
+
+function updateCheckboxOption(currentElement, option, index) {
+  if(listOfDisplayOptions[currentElement.id].checkOptions[index]) {
+    listOfDisplayOptions[currentElement.id].checkOptions[index] = option.value;
+  } else {
+    listOfDisplayOptions[currentElement.id].checkOptions[index] = "";
+    listOfDisplayOptions[currentElement.id].checkOptions[index] = option.value;
+  }
+  console.log("current option state:",listOfDisplayOptions[currentElement.id].checkOptions[index]);
+}
+
+function displayAppropriateOptions(elementObject) {
+  let htmlToDisplay = "";
+  switch(elementObject.type) {
+    case 'checkbox':
+      htmlToDisplay += `
+      <label>Label</label>
+      <input type="text" class="checkLabel"/>
+      <label>Checkbox Options</label>
+      <input type="text" class="checkboxOption"/>
+      <input type="text" class="checkboxOption"/>
+      <input type="text" class="checkboxOption"/>
+      <p>Required?</p>
+      <input type="radio" name="requiredRadio" value="Yes"/>
+      <label>Yes</label><br/>
+      <input type="radio" name="requiredRadio" value="No"/>
+      <label>No</label>
+      `;
+    break;
+  }
+  let optionsList = document.getElementById('optionsList');
+  optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
+  Array.from(document.getElementsByClassName('checkboxOption')).forEach(function(option, index) {
+    option.addEventListener('keyup', event => {
+      listOfDisplayOptions[elementObject.id].checkOptions.push(option.value);
+      updateCheckboxOption(elementObject, option, index);
+    });
+ });
+
+}
+
 // takes the current element and decides where to place to object in
 // staging area, depending on where the border is displaying
 function handleDropPlacement(currentElement) {
@@ -101,7 +264,8 @@ function handleDropPlacement(currentElement) {
   if (dragSrcEl.parentNode.id === 'controls') {
     let newStagedElement = duplicateDraggedControl();
     handleElementInserts(currentElement, newStagedElement);
-    
+    createAppropriateOptionsList(newStagedElement);
+    displayAppropriateOptions(listOfDisplayOptions[newStagedElement.id]);
   } else {
     handleElementInserts(currentElement, dragSrcEl);
   }
@@ -126,7 +290,6 @@ function createbeginnerItem() {
 function addDeleteListener(button) {
   button.addEventListener('click', function() {
     button.parentElement.remove();
-    console.log('The staging area is', stagingArea.innerHTML);
     if(!stagingArea.innerHTML.trim()) {
       stagingArea.append(createbeginnerItem());
     }
@@ -146,6 +309,7 @@ function addDuplicateListener(button) {
     clone.setAttribute('id', idCounter++)
     control.insertAdjacentElement('afterend', clone);
     addAllEventListeners(clone);
+    createAppropriateOptionsList(clone);
   })
 }
 
