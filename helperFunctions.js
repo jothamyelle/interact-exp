@@ -19,10 +19,7 @@ function addAllEventListeners(currentElement) {
   currentElement.addEventListener('dragenter', handleDragEnter, false);
   currentElement.addEventListener('dragover', handleDragOver, false);
   currentElement.addEventListener('dragleave', handleDragLeave, false);
-  console.log("parentNode is", currentElement)
   if (currentElement.parentNode.id === 'stagingArea') {
-    console.log("That's inside the if condition")
-
     currentElement.addEventListener('drop', handleDrop, false);
   }
   currentElement.addEventListener('dragend', handleDragEnd, false);
