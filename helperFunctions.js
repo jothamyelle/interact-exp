@@ -19,7 +19,12 @@ function addAllEventListeners(currentElement) {
   currentElement.addEventListener('dragenter', handleDragEnter, false);
   currentElement.addEventListener('dragover', handleDragOver, false);
   currentElement.addEventListener('dragleave', handleDragLeave, false);
-  currentElement.addEventListener('drop', handleDrop, false);
+  console.log("parentNode is", currentElement)
+  if (currentElement.parentNode.id === 'stagingArea') {
+    console.log("That's inside the if condition")
+
+    currentElement.addEventListener('drop', handleDrop, false);
+  }
   currentElement.addEventListener('dragend', handleDragEnd, false);
 }
 
@@ -118,7 +123,6 @@ function createbeginnerItem() {
   beginnerItem.setAttribute('id', 'beginnerItem');
   beginnerItem.classList.add('staged');
   beginnerItem.textContent = 'Drop Stuff Here';
-  addAllEventListeners(beginnerItem);
 
   return beginnerItem;
 }
@@ -158,7 +162,9 @@ function addResetButtonListener(){
     const confirmation = confirm('Are you sure?');
     if (confirmation) {
       stagingArea.innerHTML = '';
-      stagingArea.append(createbeginnerItem());
+      const beginnerItem = createbeginnerItem(); 
+      stagingArea.append(beginnerItem);
+      addAllEventListeners(beginnerItem);
     }
   })
 }
