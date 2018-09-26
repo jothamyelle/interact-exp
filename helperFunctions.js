@@ -487,19 +487,14 @@ function displayAppropriateOptions(elementObject) {
   let optionsList = document.getElementById('optionsList');
   optionsList.innerHTML = '';
   optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
-  Array.from(document.getElementsByClassName('checkboxOption')).forEach(function(option, index) {
-    option.addEventListener('keyup', event => {
-      updateCheckboxOption(elementObject, option, index);
-    });
-  });
-  Array.from(document.getElementsByClassName('radioOption')).forEach(function(option, index) {
-    option.addEventListener('keyup', event => {
-      updateRadioOption(elementObject, option, index);
-    });
-  });
-  Array.from(document.getElementsByClassName('selectOption')).forEach(function(option, index) {
-    option.addEventListener('keyup', event => {
-      updateSelectOption(elementObject, option, index);
+  
+  // add event listeners to all the multiple options inputs
+  let optionClasses = ['checkboxOption','radioOption','selectOption'];
+  optionClasses.forEach(optionClass => {
+    Array.from(document.getElementsByClassName(optionClass)).forEach(function(option, index) {
+      option.addEventListener('keyup', event => {
+        updateCheckboxOption(elementObject, option, index);
+      });
     });
   });
 
