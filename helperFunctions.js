@@ -241,6 +241,24 @@ function addCheckboxOption(elementId) {
   });
 }
 
+function updateRadioOption(currentElement, option, index) {
+  listOfDisplayOptions[currentElement.id].radioOptions[index] = option.value;
+}
+
+function addRadioOption(elementId) {
+  let radioInputs = document.getElementsByClassName('radioOption');
+  let radioInput = radioInputs[radioInputs.length - 1]
+  let newRow = radioInput.cloneNode();
+  radioInput.insertAdjacentElement('afterend', newRow);
+  newRow.value = '';
+  listOfDisplayOptions[elementId].radioOptions[radioInputs.length - 1] = newRow.value;
+  let elementObject = document.getElementById(elementId);
+  let index = radioInputs.length - 1;
+  newRow.addEventListener('keyup', event => {
+    updateRadioOption(elementObject, newRow, index);
+  });
+}
+
 function displayAppropriateOptions(elementObject) {
   let htmlToDisplay = "";
   // console.log(elementObject)
@@ -264,14 +282,21 @@ function displayAppropriateOptions(elementObject) {
     `;
     break;
     case 'checkbox':
-      let optionsArray = listOfDisplayOptions[elementObject.id].checkOptions;
+      let checkOptionsArray = listOfDisplayOptions[elementObject.id].checkOptions;
       htmlToDisplay += `
       <label>Label</label>
       <input type="text" class="checkLabel" value="${elementObject.label}"/>
       <label>Checkbox Options</label>`;
-
+      if(checkOptionsArray.length > 0) {
+        checkOptionsArray.forEach((option, index) => {
+          htmlToDisplay += `
+          <input type="text" class="checkboxOption" value="${checkOptionsArray[index]}"/>`;
+        });
+      } else {
+        htmlToDisplay += `
+        <input type="text" class="checkboxOption"/>`;
+      }
       htmlToDisplay += `
-      <input type="text" class="checkboxOption"/>
       <button onclick="addCheckboxOption(${elementObject.id})">+ Add Row</button>
       <br/>
       <label>Required</label>
@@ -279,13 +304,23 @@ function displayAppropriateOptions(elementObject) {
       `;
     break;
     case 'radio':
+    let radioOptionsArray = listOfDisplayOptions[elementObject.id].radioOptions;
+    console.log("radioOptionsArray:", radioOptionsArray);
     htmlToDisplay += `
       <label>Label</label>
       <input type="text" class="radioLabel" value="${elementObject.label}"/>
-      <label>radio Multiple Options</label>
-      <input type="text" class="radioOption"/>
-      <input type="text" class="radioOption"/>
-      <input type="text" class="radioOption"/>
+      <label>radio Multiple Options</label>`;
+      if(radioOptionsArray.length > 0) {
+        radioOptionsArray.forEach((option, index) => {
+          htmlToDisplay += `
+          <input type="text" class="radioOption" value="${radioOptionsArray[index]}"/>`;
+        });
+      } else {
+        htmlToDisplay += `
+        <input type="text" class="radioOption"/>`;
+      }
+      htmlToDisplay += `
+      <button onclick="addRadioOption(${elementObject.id})">+ Add Row</button>
       <label>Required</label>
       <input type="checkbox" class="radioRequired"/>
       `;
@@ -386,6 +421,11 @@ function displayAppropriateOptions(elementObject) {
   Array.from(document.getElementsByClassName('checkboxOption')).forEach(function(option, index) {
     option.addEventListener('keyup', event => {
       updateCheckboxOption(elementObject, option, index);
+    });
+  });
+  Array.from(document.getElementsByClassName('radioOption')).forEach(function(option, index) {
+    option.addEventListener('keyup', event => {
+      updateRadioOption(elementObject, option, index);
     });
   });
 
