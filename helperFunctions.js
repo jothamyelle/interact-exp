@@ -503,45 +503,31 @@ function displayAppropriateOptions(elementObject) {
     });
   });
 
-  addOptionListeners('formTitleValue', elementObject, 'value');
-  addOptionListeners('headerValue', elementObject, 'value');
-  addOptionListeners('instructionsValue', elementObject, 'value');
-  addOptionListeners('checkLabel', elementObject, 'label');
-  addOptionListeners('radioLabel', elementObject, 'label');
-  addOptionListeners('selectLabel', elementObject, 'label');
-  addOptionListeners('selectMultipleLabel', elementObject, 'label');
-  addOptionListeners('textLabel', elementObject, 'label');
-  addOptionListeners('textareaLabel', elementObject, 'label');
-  addOptionListeners('dateLabel', elementObject, 'label');
-  addOptionListeners('timeLabel', elementObject, 'label');
-  addOptionListeners('numberLabel', elementObject, 'label');
-  addOptionListeners('emailLabel', elementObject, 'label');
+  // add listeners to all the inputs in the options area
+  let controlsValueArray = ['formTitleValue','headerValue','instructionsValue'];
+  controlsValueArray.forEach(controlValue => {
+    addOptionListeners(controlValue, elementObject, 'value');
+  });
 
-  addOptionListeners('textPlaceholder', elementObject, 'placeholder');
-  addOptionListeners('textareaPlaceholder', elementObject, 'placeholder');
-  addOptionListeners('numberPlaceholder', elementObject, 'placeholder');
-  addOptionListeners('emailPlaceholder', elementObject, 'placeholder');
+  let controlsLabelArray = ['checkLabel', 'radioLabel', 'selectLabel', 'selectMultipleLabel', 'textLabel', 'textareaLabel', 'dateLabel', 'timeLabel', 'numberLabel', 'emailLabel'];
+  controlsLabelArray.forEach(controlLabel => {
+    addOptionListeners(controlLabel, elementObject, 'label');
+  });
 
-  addNumberListener('textMaxlength', elementObject, 'maxlength');
-  addNumberListener('textareaMaxlength', elementObject, 'maxlength');
-  addNumberListener('numberMaxlength', elementObject, 'maxlength');
-  addNumberListener('emailMaxlength', elementObject, 'maxlength');
+  let controlsPlaceholderArray = ['textPlaceholder', 'textareaPlaceholder', 'numberPlaceholder', 'emailPlaceholder'];
+  controlsPlaceholderArray.forEach(controlPlaceholder => {
+    addOptionListeners(controlPlaceholder, elementObject, 'placeholder');
+  });
 
-  addOptionCheckboxListener('checkRequired', elementObject, 'required');
-  addOptionCheckboxListener('radioRequired', elementObject, 'required');
-  addOptionCheckboxListener('selectRequired', elementObject, 'required');
-  addOptionCheckboxListener('selectMultipleRequired', elementObject, 'required');
-  addOptionCheckboxListener('textRequired', elementObject, 'required');
-  addOptionCheckboxListener('textareaRequired', elementObject, 'required');
-  addOptionCheckboxListener('dateRequired', elementObject, 'required');
-  addOptionCheckboxListener('timeRequired', elementObject, 'required');
-  addOptionCheckboxListener('numberRequired', elementObject, 'required');
-  addOptionCheckboxListener('emailRequired', elementObject, 'required');
+  let controlsMaxlengthArray = ['textMaxlength', 'textareaMaxlength', 'numberMaxlength', 'emailMaxlength'];
+  controlsMaxlengthArray.forEach(controlMaxlength => {
+    addNumberListener(controlMaxlength, elementObject, 'maxlength');
+  });
 
-
-
-
-  
+  let controlsRequiredArray = ['checkRequired', 'radioRequired', 'selectRequired', 'selectMultipleRequired', 'textRequired', 'textareaRequired', 'dateRequired', 'timeRequired', 'numberRequired', 'emailRequired'];
+  controlsRequiredArray.forEach(controlRequired => {
+    addOptionCheckboxListener(controlRequired, elementObject, 'required');
+  });  
 }
 
 function addOptionListeners(className, elementObject, prop) {
