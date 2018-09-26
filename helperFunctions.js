@@ -224,13 +224,16 @@ function createAppropriateOptionsList(currentElement) {
 }
 
 function updateCheckboxOption(currentElement, option, index) {
-  if(listOfDisplayOptions[currentElement.id].checkOptions[index]) {
-    listOfDisplayOptions[currentElement.id].checkOptions[index] = option.value;
-  } else {
-    listOfDisplayOptions[currentElement.id].checkOptions[index] = "";
-    listOfDisplayOptions[currentElement.id].checkOptions[index] = option.value;
-  }
-  console.log("current option state:",listOfDisplayOptions[currentElement.id].checkOptions[index]);
+  listOfDisplayOptions[currentElement.id].checkOptions[index] = option.value;
+}
+
+function addCheckboxOption(elementId) {
+  let checkboxInputs = document.getElementsByClassName('checkboxOption');
+  let checkboxInput = checkboxInputs[checkboxInputs.length - 1]
+  let newRow = checkboxInput.cloneNode();
+  checkboxInput.insertAdjacentElement('afterend', newRow);
+  newRow.value = '';
+  
 }
 
 function displayAppropriateOptions(elementObject) {
@@ -256,13 +259,17 @@ function displayAppropriateOptions(elementObject) {
     `;
     break;
     case 'checkbox':
+      let optionsArray = listOfDisplayOptions[elementObject.id].checkOptions;
+      console.log("optionsArray:", optionsArray);
       htmlToDisplay += `
       <label>Label</label>
       <input type="text" class="checkLabel" value="${elementObject.label}"/>
-      <label>Checkbox Options</label>
+      <label>Checkbox Options</label>`;
+
+      htmlToDisplay += `
       <input type="text" class="checkboxOption"/>
-      <input type="text" class="checkboxOption"/>
-      <input type="text" class="checkboxOption"/>
+      <button onclick="addCheckboxOption(${elementObject.id})">+ Add Row</button>
+      <br/>
       <label>Required</label>
       <input type="checkbox" class="checkRequired"/>
       `;
@@ -367,18 +374,17 @@ function displayAppropriateOptions(elementObject) {
       <input type="number" class="emailMaxlength" value="${elementObject.maxlength}"/>
       `;
     break;
-    
-
   }
+
   let optionsList = document.getElementById('optionsList');
   optionsList.innerHTML = '';
   optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
   Array.from(document.getElementsByClassName('checkboxOption')).forEach(function(option, index) {
     option.addEventListener('keyup', event => {
-      listOfDisplayOptions[elementObject.id].checkOptions.push(option.value);
       updateCheckboxOption(elementObject, option, index);
     });
   });
+
   addOptionListeners('formTitleValue', elementObject, 'value');
   addOptionListeners('headerValue', elementObject, 'value');
   addOptionListeners('instructionsValue', elementObject, 'value');
@@ -412,8 +418,8 @@ function displayAppropriateOptions(elementObject) {
 function addOptionListeners(className, elementObject, prop) {
   Array.from(document.getElementsByClassName(className)).forEach(function (element) {
     element.addEventListener('keyup', function() {
-      console.log(listOfDisplayOptions[elementObject.id])
       listOfDisplayOptions[elementObject.id][prop] = element['value'];
+      console.log(listOfDisplayOptions[elementObject.id])
     })
   })
 }
