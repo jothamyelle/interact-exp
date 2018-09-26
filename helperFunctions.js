@@ -112,10 +112,7 @@ function createOption(id, type) {
     type: type,
     value: '',
     label: '',
-    checkOptions: [],
-    radioOptions: [],
-    selectOptions: [],
-    selectMultipleOptions: [],
+    controlOptions: [],
     required: false,
     multiple: true,
     maxlength: 255,
@@ -147,78 +144,6 @@ function createAppropriateOptionsList(currentElement) {
 
   listOfDisplayOptions[currentElement.id] = options;
 }
-
-// function updateCheckboxOption(currentElement, option, index) {
-//   listOfDisplayOptions[currentElement.id].checkOptions[index] = option.value;
-// }
-
-// function addCheckboxOption(elementId) {
-//   let checkboxInputs = document.getElementsByClassName('checkboxOption');
-//   let checkboxInput = checkboxInputs[checkboxInputs.length - 1]
-//   let newRow = checkboxInput.cloneNode();
-//   checkboxInput.insertAdjacentElement('afterend', newRow);
-//   newRow.value = '';
-//   listOfDisplayOptions[elementId].checkOptions[checkboxInputs.length - 1] = newRow.value;
-//   let elementObject = document.getElementById(elementId);
-//   let index = checkboxInputs.length - 1;
-//   newRow.addEventListener('keyup', event => {
-//     updateCheckboxOption(elementObject, newRow, index);
-//   });
-// }
-
-// function updateRadioOption(currentElement, option, index) {
-//   listOfDisplayOptions[currentElement.id].radioOptions[index] = option.value;
-// }
-
-// function addRadioOption(elementId) {
-//   let radioInputs = document.getElementsByClassName('radioOption');
-//   let radioInput = radioInputs[radioInputs.length - 1]
-//   let newRow = radioInput.cloneNode();
-//   radioInput.insertAdjacentElement('afterend', newRow);
-//   newRow.value = '';
-//   listOfDisplayOptions[elementId].radioOptions[radioInputs.length - 1] = newRow.value;
-//   let elementObject = document.getElementById(elementId);
-//   let index = radioInputs.length - 1;
-//   newRow.addEventListener('keyup', event => {
-//     updateRadioOption(elementObject, newRow, index);
-//   });
-// }
-
-// function updateSelectOption(currentElement, option, index) {
-//   listOfDisplayOptions[currentElement.id].selectOptions[index] = option.value;
-// }
-
-// function addSelectOption(elementId) {
-//   let selectInputs = document.getElementsByClassName('selectOption');
-//   let selectInput = selectInputs[selectInputs.length - 1]
-//   let newRow = selectInput.cloneNode();
-//   selectInput.insertAdjacentElement('afterend', newRow);
-//   newRow.value = '';
-//   listOfDisplayOptions[elementId].selectOptions[selectInputs.length - 1] = newRow.value;
-//   let elementObject = document.getElementById(elementId);
-//   let index = selectInputs.length - 1;
-//   newRow.addEventListener('keyup', event => {
-//     updateSelectOption(elementObject, newRow, index);
-//   });
-// }
-
-// function updateSelectMultipleOption(currentElement, option, index) {
-//   listOfDisplayOptions[currentElement.id].selectMultipleOptions[index] = option.value;
-// }
-
-// function addSelectMultipleOption(elementId) {
-//   let selectMultipleInputs = document.getElementsByClassName('selectMultipleOption');
-//   let selectMultipleInput = selectMultipleInputs[selectMultipleInputs.length - 1]
-//   let newRow = selectMultipleInput.cloneNode();
-//   selectMultipleInput.insertAdjacentElement('afterend', newRow);
-//   newRow.value = '';
-//   listOfDisplayOptions[elementId].selectMultipleOptions[selectMultipleInputs.length - 1] = newRow.value;
-//   let elementObject = document.getElementById(elementId);
-//   let index = selectMultipleInputs.length - 1;
-//   newRow.addEventListener('keyup', event => {
-//     updateSelectMultipleOption(elementObject, newRow, index);
-//   });
-// }
 
 // try to refactor all the above functions into one general control option function
 function updateControlOption(currentElement, option, index) {
