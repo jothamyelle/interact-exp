@@ -42,28 +42,31 @@ function createDuplicateButton() {
 }
 
 function createFormInput(inputType) {
-  if (inputType === '') {
-    return;
+  let input;
+  switch (inputType) {
+    // case '':
+    //   break;
+    case 'textarea':
+      input = document.createElement('textarea');
+      break;
+    case 'select':
+      input = document.createElement('select');
+      break;
+    case 'select multiple':
+      input = document.createElement('select');
+      input.setAttribute('multiple', '');
+      break;
+    default:
+      input = document.createElement('input');
+      input.setAttribute('type', inputType);
   }
-  if (inputType === 'textarea') {
-    return document.createElement('textarea');
-  }
-  if (inputType === 'select') {
-    return document.createElement('select');
-  }  
-  if (inputType === 'select multiple') {
-    const input = document.createElement('select');
-    input.setAttribute('multiple', '');
-    return input;
-  }
-  const input = document.createElement('input');
-  input.setAttribute('type', inputType);
-  return input;
+  return input; 
 }
 
 function turnToFormControl(node) {
 
   const inputType = node.dataset.type;
+  // Doesn't add forn fields for Title, Header and Instructions
   if (inputType) {
     node.append(createFormInput(inputType));
   }
