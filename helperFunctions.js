@@ -264,7 +264,7 @@ function displayAppropriateOptions(elementObject) {
       <input type="text" class="checkboxOption"/>
       <input type="text" class="checkboxOption"/>
       <label>Required</label>
-      <input type="checkbox" class="checkRequired"/>
+      <input type="checkbox" class="checkRequired" ${elementObject.required ? 'checked' : ''}/>
       `;
     break;
     case 'radio':
@@ -276,7 +276,7 @@ function displayAppropriateOptions(elementObject) {
       <input type="text" class="radioOption"/>
       <input type="text" class="radioOption"/>
       <label>Required</label>
-      <input type="checkbox" class="radioRequired"/>
+      <input type="checkbox" class="radioRequired"${elementObject.required ? 'checked' : ''}/>
       `;
     break;
     case 'select':
@@ -288,7 +288,7 @@ function displayAppropriateOptions(elementObject) {
       <input type="text" class="selectOption"/>
       <input type="text" class="selectOption"/>
       <label>Required</label>
-      <input type="checkbox" class="selectRequired"/>
+      <input type="checkbox" class="selectRequired" ${elementObject.required ? 'checked' : ''}/>
       `;
     break;
     case 'selectMultiple':
@@ -300,7 +300,7 @@ function displayAppropriateOptions(elementObject) {
       <input type="text" class="selectMultipleOption"/>
       <input type="text" class="selectMultipleOption"/>
       <label>Required</label>
-      <input type="checkbox" class="selectMultipleRequired"/>
+      <input type="checkbox" class="selectMultipleRequired" ${elementObject.required ? 'checked' : ''}/>
       `;
     break;
     case 'text':
@@ -310,7 +310,7 @@ function displayAppropriateOptions(elementObject) {
       <label>Placeholder</label>
       <input type="text" class="textPlaceholder" value="${elementObject.placeholder}"/>
       <label>Required</label>
-      <input type="checkbox" class="textRequired"/>
+      <input type="checkbox" class="textRequired" ${elementObject.required ? 'checked' : ''}/>
       <label>Maximum Length</label>
       <input type="number" class="textMaxlength" value="${elementObject.maxlength}"/>
       `;
@@ -322,7 +322,7 @@ function displayAppropriateOptions(elementObject) {
       <label>Placeholder</label>
       <input type="text" class="textareaPlaceholder" value="${elementObject.placeholder}"/>
       <label>Required</label>
-      <input type="checkbox" class="textareaRequired"/>
+      <input type="checkbox" class="textareaRequired" ${elementObject.required ? 'checked' : ''}/>
       <label>Maximum Length</label>
       <input type="number" class="textareaMaxlength" value="${elementObject.maxlength}"/>
       `;
@@ -332,7 +332,7 @@ function displayAppropriateOptions(elementObject) {
       <label>Label</label>
       <input type="text" class="dateLabel" value="${elementObject.label}"/>
       <label>Required</label>
-      <input type="checkbox" class="dateRequired"/>
+      <input type="checkbox" class="dateRequired" ${elementObject.required ? 'checked' : ''}/>
       `;
     break;
     case 'time':
@@ -340,7 +340,7 @@ function displayAppropriateOptions(elementObject) {
       <label>Label</label>
       <input type="text" class="timeLabel" value="${elementObject.label}"/>
       <label>Required</label>
-      <input type="checkbox" class="timeRequired"/>
+      <input type="checkbox" class="timeRequired" ${elementObject.required ? 'checked' : ''}/>
       `;
     break;
     case 'number':
@@ -350,7 +350,7 @@ function displayAppropriateOptions(elementObject) {
       <label>Placeholder</label>
       <input type="number" class="numberPlaceholder" value="${elementObject.placeholder}"/>
       <label>Required</label>
-      <input type="checkbox" class="numberRequired"/>
+      <input type="checkbox" class="numberRequired" ${elementObject.required ? 'checked' : ''}/>
       <label>Maximum Length</label>
       <input type="number" class="numberMaxlength" value="${elementObject.maxlength}"/>
       `;
@@ -362,7 +362,7 @@ function displayAppropriateOptions(elementObject) {
       <label>Placeholder</label>
       <input type="text" class="emailPlaceholder" value="${elementObject.placeholder}"/>
       <label>Required</label>
-      <input type="checkbox" class="emailRequired"/>
+      <input type="checkbox" class="emailRequired" ${elementObject.required ? 'checked' : ''}/>
       <label>Maximum Length</label>
       <input type="number" class="emailMaxlength" value="${elementObject.maxlength}"/>
       `;
@@ -403,7 +403,16 @@ function displayAppropriateOptions(elementObject) {
   addOptionListeners('numberMaxlength', elementObject, 'maxlength');
   addOptionListeners('emailMaxlength', elementObject, 'maxlength');
 
-
+  addOptionCheckboxListener('checkRequired', elementObject, 'required');
+  addOptionCheckboxListener('radioRequired', elementObject, 'required');
+  addOptionCheckboxListener('selectRequired', elementObject, 'required');
+  addOptionCheckboxListener('selectMultipleRequired', elementObject, 'required');
+  addOptionCheckboxListener('textRequired', elementObject, 'required');
+  addOptionCheckboxListener('textareaRequired', elementObject, 'required');
+  addOptionCheckboxListener('dateRequired', elementObject, 'required');
+  addOptionCheckboxListener('timeRequired', elementObject, 'required');
+  addOptionCheckboxListener('numberRequired', elementObject, 'required');
+  addOptionCheckboxListener('emailRequired', elementObject, 'required');
 
 
   
@@ -414,6 +423,15 @@ function addOptionListeners(className, elementObject, prop) {
     element.addEventListener('keyup', function() {
       console.log(listOfDisplayOptions[elementObject.id])
       listOfDisplayOptions[elementObject.id][prop] = element['value'];
+    })
+  })
+}
+
+function addOptionCheckboxListener(className, elementObject, prop) {
+  Array.from(document.getElementsByClassName(className)).forEach(function (element) {
+    element.addEventListener('change', function() {
+      console.log(listOfDisplayOptions[elementObject.id][prop])
+      listOfDisplayOptions[elementObject.id][prop] = listOfDisplayOptions[elementObject.id][prop] ? false : true;
     })
   })
 }
@@ -478,6 +496,7 @@ function addDuplicateListener(button) {
     control.insertAdjacentElement('afterend', clone);
     addAllEventListeners(clone);
     createAppropriateOptionsList(clone);
+    controlClickDisplayOptions(clone);
   })
 }
 
