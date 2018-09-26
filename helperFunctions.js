@@ -70,6 +70,8 @@ function turnToFormControl(node) {
   const duplicateButton = createDuplicateButton();
   node.prepend(duplicateButton);
   addDuplicateListener(duplicateButton);
+
+  controlClickDisplayOptions(node);
   
   return node;
 }
@@ -165,7 +167,7 @@ function createAppropriateOptionsList(currentElement) {
         id: currentElement.id,
         type: 'text',
         label: '',
-        maxlength: 1000,
+        maxlength: 255,
         required: false,
         placeholder: ''
       }
@@ -175,7 +177,7 @@ function createAppropriateOptionsList(currentElement) {
         id: currentElement.id,
         type: 'textarea',
         label: '',
-        maxlength: 1000,
+        maxlength: 255,
         required: false,
         placeholder: ''
       }
@@ -201,6 +203,7 @@ function createAppropriateOptionsList(currentElement) {
         id: currentElement.id,
         type: 'number',
         label: '',
+        maxlength: 255,
         required: false,
         placeholder: ''
       }
@@ -210,6 +213,7 @@ function createAppropriateOptionsList(currentElement) {
         id: currentElement.id,
         type: 'email',
         label: '',
+        maxlength: 255,
         required: false,
         placeholder: ''
       }
@@ -231,42 +235,42 @@ function updateCheckboxOption(currentElement, option, index) {
 
 function displayAppropriateOptions(elementObject) {
   let htmlToDisplay = "";
-  console.log(elementObject.type);
+  // console.log(elementObject)
   switch(elementObject.type) {
     case 'title':
     htmlToDisplay += `
       <label>Form Title</label>
-      <input type="text" class="formTitleValue"/>
+      <input type="text" class="formTitleValue" value="${elementObject.value}"/>
     `;
     break;
     case 'header':
     htmlToDisplay += `
       <label>Section Header</label>
-      <input type="text" class="headerValue"/>
+      <input type="text" class="headerValue" value="${elementObject.value}"/>
     `;
     break;
     case 'paragraph':
     htmlToDisplay += `
       <label>Instructions or Question</label>
-      <textarea class="formTitleValue"/>
+      <textarea class="instructionsValue"/>${elementObject.value}</textarea>
     `;
     break;
     case 'checkbox':
       htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="checkLabel"/>
+      <input type="text" class="checkLabel" value="${elementObject.label}"/>
       <label>Checkbox Options</label>
       <input type="text" class="checkboxOption"/>
       <input type="text" class="checkboxOption"/>
       <input type="text" class="checkboxOption"/>
       <label>Required</label>
-      <input type="checkbox" class="radioRequired"/>
+      <input type="checkbox" class="checkRequired"/>
       `;
     break;
     case 'radio':
     htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="radioLabel"/>
+      <input type="text" class="radioLabel" value="${elementObject.label}"/>
       <label>radio Multiple Options</label>
       <input type="text" class="radioOption"/>
       <input type="text" class="radioOption"/>
@@ -278,7 +282,7 @@ function displayAppropriateOptions(elementObject) {
     case 'select':
     htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="selectLabel"/>
+      <input type="text" class="selectLabel" value="${elementObject.label}"/>
       <label>Select Multiple Options</label>
       <input type="text" class="selectOption"/>
       <input type="text" class="selectOption"/>
@@ -290,7 +294,7 @@ function displayAppropriateOptions(elementObject) {
     case 'selectMultiple':
     htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="selectMultipleLabel"/>
+      <input type="text" class="selectMultipleLabel" value="${elementObject.label}"/>
       <label>Select Multiple Options</label>
       <input type="text" class="selectMultipleOption"/>
       <input type="text" class="selectMultipleOption"/>
@@ -302,33 +306,31 @@ function displayAppropriateOptions(elementObject) {
     case 'text':
     htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="textLabel"/>
+      <input type="text" class="textLabel" value="${elementObject.label}"/>
       <label>Placeholder</label>
-      <input type="text" class="textPlaceholder"/>
+      <input type="text" class="textPlaceholder" value="${elementObject.placeholder}"/>
       <label>Required</label>
       <input type="checkbox" class="textRequired"/>
       <label>Maximum Length</label>
-      <input type="number" class="textMaxlength" value="254"/>
+      <input type="number" class="textMaxlength" value="${elementObject.maxlength}"/>
       `;
     break;
     case 'textarea':
     htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="textareaLabel"/>
+      <input type="text" class="textareaLabel" value="${elementObject.label}"/>
       <label>Placeholder</label>
-      <input type="text" class="textareaPlaceholder"/>
+      <input type="text" class="textareaPlaceholder" value="${elementObject.placeholder}"/>
       <label>Required</label>
       <input type="checkbox" class="textareaRequired"/>
       <label>Maximum Length</label>
-      <input type="number" class="textareaMaxlength" value="254"/>
+      <input type="number" class="textareaMaxlength" value="${elementObject.maxlength}"/>
       `;
     break;
     case 'date':
     htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="dateLabel"/>
-      <label>Placeholder</label>
-      <input type="date" class="datePlaceholder"/>
+      <input type="text" class="dateLabel" value="${elementObject.label}"/>
       <label>Required</label>
       <input type="checkbox" class="dateRequired"/>
       `;
@@ -336,9 +338,7 @@ function displayAppropriateOptions(elementObject) {
     case 'time':
     htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="timeLabel"/>
-      <label>Placeholder</label>
-      <input type="time" class="timePlaceholder"/>
+      <input type="text" class="timeLabel" value="${elementObject.label}"/>
       <label>Required</label>
       <input type="checkbox" class="timeRequired"/>
       `;
@@ -346,39 +346,76 @@ function displayAppropriateOptions(elementObject) {
     case 'number':
     htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="numberLabel"/>
+      <input type="text" class="numberLabel" value="${elementObject.label}"/>
       <label>Placeholder</label>
-      <input type="number" class="numberPlaceholder"/>
+      <input type="number" class="numberPlaceholder" value="${elementObject.placeholder}"/>
       <label>Required</label>
       <input type="checkbox" class="numberRequired"/>
       <label>Maximum Length</label>
-      <input type="number" class="numberMaxlength" value="254"/>
+      <input type="number" class="numberMaxlength" value="${elementObject.maxlength}"/>
       `;
     break;
     case 'email':
       htmlToDisplay += `
       <label>Label</label>
-      <input type="text" class="emailLabel"/>
+      <input type="text" class="emailLabel" value="${elementObject.label}"/>
       <label>Placeholder</label>
-      <input type="text" class="emailPlaceholder"/>
+      <input type="text" class="emailPlaceholder" value="${elementObject.placeholder}"/>
       <label>Required</label>
       <input type="checkbox" class="emailRequired"/>
       <label>Maximum Length</label>
-      <input type="number" class="emailMaxlength" value="254"/>
+      <input type="number" class="emailMaxlength" value="${elementObject.maxlength}"/>
       `;
     break;
     
 
   }
   let optionsList = document.getElementById('optionsList');
+  optionsList.innerHTML = '';
   optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
   Array.from(document.getElementsByClassName('checkboxOption')).forEach(function(option, index) {
     option.addEventListener('keyup', event => {
       listOfDisplayOptions[elementObject.id].checkOptions.push(option.value);
       updateCheckboxOption(elementObject, option, index);
     });
- });
+  });
+  addOptionListeners('formTitleValue', elementObject, 'value');
+  addOptionListeners('headerValue', elementObject, 'value');
+  addOptionListeners('instructionsValue', elementObject, 'value');
+  addOptionListeners('checkLabel', elementObject, 'label');
+  addOptionListeners('radioLabel', elementObject, 'label');
+  addOptionListeners('selectLabel', elementObject, 'label');
+  addOptionListeners('selectMultipleLabel', elementObject, 'label');
+  addOptionListeners('textLabel', elementObject, 'label');
+  addOptionListeners('textareaLabel', elementObject, 'label');
+  addOptionListeners('dateLabel', elementObject, 'label');
+  addOptionListeners('timeLabel', elementObject, 'label');
+  addOptionListeners('numberLabel', elementObject, 'label');
+  addOptionListeners('emailLabel', elementObject, 'label');
 
+  addOptionListeners('textPlaceholder', elementObject, 'placeholder');
+  addOptionListeners('textareaPlaceholder', elementObject, 'placeholder');
+  addOptionListeners('numberPlaceholder', elementObject, 'placeholder');
+  addOptionListeners('emailPlaceholder', elementObject, 'placeholder');
+
+  addOptionListeners('textMaxlength', elementObject, 'maxlength');
+  addOptionListeners('textareaMaxlength', elementObject, 'maxlength');
+  addOptionListeners('numberMaxlength', elementObject, 'maxlength');
+  addOptionListeners('emailMaxlength', elementObject, 'maxlength');
+
+
+
+
+  
+}
+
+function addOptionListeners(className, elementObject, prop) {
+  Array.from(document.getElementsByClassName(className)).forEach(function (element) {
+    element.addEventListener('keyup', function() {
+      console.log(listOfDisplayOptions[elementObject.id])
+      listOfDisplayOptions[elementObject.id][prop] = element['value'];
+    })
+  })
 }
 
 // takes the current element and decides where to place to object in
@@ -393,6 +430,12 @@ function handleDropPlacement(currentElement) {
   } else {
     handleElementInserts(currentElement, dragSrcEl);
   }
+}
+
+function controlClickDisplayOptions(node) {
+  node.addEventListener('click', function() {
+    displayAppropriateOptions(listOfDisplayOptions[node.id]);
+  })
 }
 
 // removes the irrelevant classes
