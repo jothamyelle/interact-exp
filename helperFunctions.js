@@ -42,6 +42,9 @@ function createDuplicateButton() {
 }
 
 function createFormInput(inputType) {
+  if (inputType === '') {
+    return;
+  }
   if (inputType === 'textarea') {
     return document.createElement('textarea');
   }
@@ -61,7 +64,9 @@ function createFormInput(inputType) {
 function turnToFormControl(node) {
 
   const inputType = node.dataset.type;
-  node.append(createFormInput(inputType));
+  if (inputType) {
+    node.append(createFormInput(inputType));
+  }
 
   const deleteButton = createDeleteButton();
   node.append(deleteButton);
@@ -398,10 +403,10 @@ function displayAppropriateOptions(elementObject) {
   addOptionListeners('numberPlaceholder', elementObject, 'placeholder');
   addOptionListeners('emailPlaceholder', elementObject, 'placeholder');
 
-  addOptionListeners('textMaxlength', elementObject, 'maxlength');
-  addOptionListeners('textareaMaxlength', elementObject, 'maxlength');
-  addOptionListeners('numberMaxlength', elementObject, 'maxlength');
-  addOptionListeners('emailMaxlength', elementObject, 'maxlength');
+  addNumberListener('textMaxlength', elementObject, 'maxlength');
+  addNumberListener('textareaMaxlength', elementObject, 'maxlength');
+  addNumberListener('numberMaxlength', elementObject, 'maxlength');
+  addNumberListener('emailMaxlength', elementObject, 'maxlength');
 
   addOptionCheckboxListener('checkRequired', elementObject, 'required');
   addOptionCheckboxListener('radioRequired', elementObject, 'required');
@@ -415,14 +420,39 @@ function displayAppropriateOptions(elementObject) {
   addOptionCheckboxListener('emailRequired', elementObject, 'required');
 
 
+
+
   
 }
 
 function addOptionListeners(className, elementObject, prop) {
   Array.from(document.getElementsByClassName(className)).forEach(function (element) {
     element.addEventListener('keyup', function() {
-      console.log(listOfDisplayOptions[elementObject.id])
+      // console.log(listOfDisplayOptions[elementObject.id])
       listOfDisplayOptions[elementObject.id][prop] = element['value'];
+      const control = document.getElementById(elementObject.id);
+      if (prop === 'value' || prop === 'label') {
+        control.querySelector('label').textContent = element['value'];
+      } else if (prop === 'placeholder') {
+        if (control.dataset.type === 'textarea') {
+          control.querySelector('textarea').setAttribute('placeholder', element['value']);
+        } else {
+          control.querySelector('input').setAttribute('placeholder', element['value']);
+        } 
+      }
+    })
+  })
+}
+
+function addNumberListener(className, elementObject, prop) {
+  Array.from(document.getElementsByClassName(className)).forEach(function (element) {
+    element.addEventListener('change', function() {
+      // console.log(listOfDisplayOptions[elementObject.id])
+      listOfDisplayOptions[elementObject.id][prop] = element['value'];
+      const control = document.getElementById(elementObject.id);
+      if (prop === 'maxlength') {
+        control.getElementsByClassName('maxlengthDisplay')[0].textContent = `Maxlength: ${element.value} characters`;
+      }
     })
   })
 }
@@ -432,6 +462,14 @@ function addOptionCheckboxListener(className, elementObject, prop) {
     element.addEventListener('change', function() {
       console.log(listOfDisplayOptions[elementObject.id][prop])
       listOfDisplayOptions[elementObject.id][prop] = listOfDisplayOptions[elementObject.id][prop] ? false : true;
+      const control = document.getElementById(elementObject.id);
+      if (prop === 'required') {
+        if (listOfDisplayOptions[elementObject.id][prop]) {
+          control.getElementsByClassName('requiredDisplay')[0].textContent = 'Required';
+        } else {
+          control.getElementsByClassName('requiredDisplay')[0].textContent = '';          
+        }
+      }
     })
   })
 }
