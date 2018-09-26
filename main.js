@@ -83,25 +83,6 @@ var controlRows = document.querySelectorAll('#controls .controls');
   addAllEventListeners(controlRow);
 });
 
-// Save Button
-
-function addSaveButtonListener() {
-  const saveButton = document.getElementById('saveButton');
-  const savedFormTemplate = [];
-  saveButton.addEventListener('click', function() { 
- 
-    const controls = stagingArea.getElementsByClassName('staged');
-    Array.prototype.forEach.call(controls, function(control) {
-      const templateField = {}
-      templateField.type = control.dataset.type;
-      templateField.label = control.querySelectorAll('label')[0].textContent;
-      savedFormTemplate.push(templateField);
-    })
-  
-    console.log(JSON.stringify(savedFormTemplate));
-    return JSON.stringify(savedFormTemplate);
-  })
-}
 
 addResetButtonListener();
 addSaveButtonListener();
