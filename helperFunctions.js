@@ -462,6 +462,14 @@ function addOptionCheckboxListener(className, elementObject, prop) {
     element.addEventListener('change', function() {
       console.log(listOfDisplayOptions[elementObject.id][prop])
       listOfDisplayOptions[elementObject.id][prop] = listOfDisplayOptions[elementObject.id][prop] ? false : true;
+      const control = document.getElementById(elementObject.id);
+      if (prop === 'required') {
+        if (listOfDisplayOptions[elementObject.id][prop]) {
+          control.getElementsByClassName('requiredDisplay')[0].textContent = 'Required';
+        } else {
+          control.getElementsByClassName('requiredDisplay')[0].textContent = '';          
+        }
+      }
     })
   })
 }
