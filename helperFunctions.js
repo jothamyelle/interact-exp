@@ -106,6 +106,23 @@ function handleElementInserts(currentElement, elementToDrop) {
   }
 }
 
+function createOption(id, type) {
+  return {
+    id: id,
+    type: type,
+    value: '',
+    label: '',
+    checkOptions: [],
+    radioOptions: [],
+    selectOptions: [],
+    selectMultipleOptions: [],
+    required: false,
+    multiple: true,
+    maxlength: 255,
+    placeholder: ''
+  }
+}
+
 function createAppropriateOptionsList(currentElement) {
   let options = {};
 
@@ -113,119 +130,19 @@ function createAppropriateOptionsList(currentElement) {
   // and change the options accordingly
   switch(currentElement.title)  {
     case 'Form Title':
-      options = {
-        id: currentElement.id,
-        type: 'title',
-        value: ''
-      }
-    break;
+      options = createOption(currentElement.id, 'title'); 
+      break;
     case 'Section Header':
-      options = {
-        id: currentElement.id,
-        type: 'header',
-        value: ''
-      }
-    break;
+      options = createOption(currentElement.id, 'header'); 
+      break;
     case 'Question or instructions to fill the field':
-      options = {
-        id: currentElement.id,
-        type: 'paragraph',
-        value: ''
-      }
-    break;
-    case 'Checkbox':
-      options = {
-        id: currentElement.id,
-        type: 'checkbox',
-        label: '',
-        checkOptions: [],
-        required: false
-      }
-    break;
-    case 'Radio Button':
-      options = {
-        id: currentElement.id,
-        type: 'radio',
-        label: '',
-        radioOptions: [],
-        required: false
-      }
-    break;
-    case 'Select':
-      options = {
-        id: currentElement.id,
-        type: 'select',
-        label: '',
-        selectOptions: [],
-        required: false
-      }
-    break;
+      options = createOption(currentElement.id, 'paragraph'); 
+      break;
     case 'Select Multiple':
-      options = {
-        id: currentElement.id,
-        type: 'selectMultiple',
-        label: '',
-        selectMultipleOptions: [],
-        required: false,
-        multiple: true
-      }
-    break;
-    case 'Text':
-      options = {
-        id: currentElement.id,
-        type: 'text',
-        label: '',
-        maxlength: 255,
-        required: false,
-        placeholder: ''
-      }
-    break;
-    case 'Text Area':
-      options = {
-        id: currentElement.id,
-        type: 'textarea',
-        label: '',
-        maxlength: 255,
-        required: false,
-        placeholder: ''
-      }
-    break;
-    case 'Date':
-      options = {
-        id: currentElement.id,
-        type: 'date',
-        label: '',
-        required: false
-      }
-    break;
-    case 'Time':
-      options = {
-        id: currentElement.id,
-        type: 'time',
-        label: '',
-        required: false
-      }
-    break;
-    case 'Number':
-      options = {
-        id: currentElement.id,
-        type: 'number',
-        label: '',
-        maxlength: 255,
-        required: false,
-        placeholder: ''
-      }
-    break;
-    case 'Email':
-      options = {
-        id: currentElement.id,
-        type: 'email',
-        label: '',
-        maxlength: 255,
-        required: false,
-        placeholder: ''
-      }
-    break;
+      options = createOption(currentElement.id, 'selectMultiple'); 
+      break;
+    default:
+      options = createOption(currentElement.id, currentElement.dataset.type); 
   }
 
   listOfDisplayOptions[currentElement.id] = options;
