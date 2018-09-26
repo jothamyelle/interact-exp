@@ -233,7 +233,12 @@ function addCheckboxOption(elementId) {
   let newRow = checkboxInput.cloneNode();
   checkboxInput.insertAdjacentElement('afterend', newRow);
   newRow.value = '';
-  
+  listOfDisplayOptions[elementId].checkOptions[checkboxInputs.length - 1] = newRow.value;
+  let elementObject = document.getElementById(elementId);
+  let index = checkboxInputs.length - 1;
+  newRow.addEventListener('keyup', event => {
+    updateCheckboxOption(elementObject, newRow, index);
+  });
 }
 
 function displayAppropriateOptions(elementObject) {
@@ -260,7 +265,6 @@ function displayAppropriateOptions(elementObject) {
     break;
     case 'checkbox':
       let optionsArray = listOfDisplayOptions[elementObject.id].checkOptions;
-      console.log("optionsArray:", optionsArray);
       htmlToDisplay += `
       <label>Label</label>
       <input type="text" class="checkLabel" value="${elementObject.label}"/>
