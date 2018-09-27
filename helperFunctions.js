@@ -170,11 +170,11 @@ function updateStagingAreaHTML(currentElement, type) {
   let controlInStagingArea = document.getElementById(currentElement.id);
   
   controlInStagingArea.innerHTML = `
-  <button class="duplicateControl">Duplicate</button>
+  <button id="control${currentElement.id}DuplicateButton" class="duplicateControl">Duplicate</button>
   <span class="requiredDisplay"></span><br>
   <label>${labelName}</label>
   <div id="control${currentElement.id}MultiOptions"></div>
-  <button class="deleteControl">Delete</button></div>`;
+  <button id="control${currentElement.id}DeleteButton" class="deleteControl">Delete</button></div>`;
 
   let multiOptionsDiv = document.getElementById(`control${currentElement.id}MultiOptions`);
 
@@ -201,10 +201,11 @@ function updateStagingAreaHTML(currentElement, type) {
     break;
   }
 
-  let deleteButton = document.querySelector(`#\\${currentElement.id} > .deleteControl`);
-  let duplicateButton = document.querySelector(`#\\${currentElement.id} > .duplicateControl`);
+  let deleteButton = document.getElementById(`control${currentElement.id}DeleteButton`);
+  let duplicateButton = document.getElementById(`control${currentElement.id}DuplicateButton`);
   addDeleteListener(deleteButton);
   addDuplicateListener(duplicateButton);
+  controlClickDisplayOptions(currentElement);
 }
 function addControlOption(elementId, className) {
   let controlInputs = document.getElementsByClassName(className);
@@ -225,6 +226,7 @@ function addControlOption(elementId, className) {
 }
 
 function displayAppropriateOptions(elementObject) {
+  console.log("elementObject:", elementObject);
   let htmlToDisplay = "";
   let controlOptionsArray = listOfDisplayOptions[elementObject.id].controlOptions;
   switch(elementObject.type) {
@@ -509,6 +511,7 @@ function handleDropPlacement(currentElement) {
 }
 
 function controlClickDisplayOptions(node) {
+  console.log(node);
   node.addEventListener('click', function() {
     displayAppropriateOptions(listOfDisplayOptions[node.id]);
   })
@@ -548,12 +551,12 @@ function addDuplicateListener(button) {
     addDeleteListener(cloneDelete);
     
     const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
-    addDuplicateListener(cloneDuplicate);
-    clone.setAttribute('id', idCounter++)
-    control.insertAdjacentElement('afterend', clone);
-    addAllEventListeners(clone);
-    createAppropriateOptionsList(clone);
-    listOfDisplayOptions[clone.id] = listOfDisplayOptions[control.id];
+    addDuplicateListener(cloneDuplicate); // adds listener to the clone
+    clone.setAttribute('id', idCounter++) // sets the HTML id attribute to the new id
+    listOfDisplayOptions[clone.id] = listOfDisplayOptions[control.id]; // 
+    control.insertAdjacentElement('afterend', clone); // sets the new element in place in the staging area
+    addAllEventListeners(clone); // adds all drag and drop listeners
+    createAppropriateOptionsList(clone); // creates options list based on that element's id
     displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
   })
