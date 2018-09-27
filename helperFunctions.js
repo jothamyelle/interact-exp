@@ -575,7 +575,6 @@ function addDuplicateListener(button) {
     listOfDisplayOptions[clone.id] = listOfDisplayOptions[control.id];
     displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
-    console.log(listOfDisplayOptions)
   })
 }
 
