@@ -112,10 +112,7 @@ function createOption(id, type) {
     type: type,
     value: '',
     label: '',
-    checkOptions: [],
-    radioOptions: [],
-    selectOptions: [],
-    selectMultipleOptions: [],
+    controlOptions: [],
     required: false,
     multiple: true,
     maxlength: 255,
@@ -148,81 +145,30 @@ function createAppropriateOptionsList(currentElement) {
   listOfDisplayOptions[currentElement.id] = options;
 }
 
-function updateCheckboxOption(currentElement, option, index) {
-  listOfDisplayOptions[currentElement.id].checkOptions[index] = option.value;
+// try to refactor all the above functions into one general control option function
+function updateControlOption(currentElement, option, index) {
+  listOfDisplayOptions[currentElement.id].controlOptions[index] = option.value;
 }
-
-function addCheckboxOption(elementId) {
-  let checkboxInputs = document.getElementsByClassName('checkboxOption');
-  let checkboxInput = checkboxInputs[checkboxInputs.length - 1]
-  let newRow = checkboxInput.cloneNode();
-  checkboxInput.insertAdjacentElement('afterend', newRow);
+function addControlOption(elementId, className) {
+  let controlInputs = document.getElementsByClassName(className);
+  let controlInput = controlInputs[controlInputs.length - 1]
+  let newRow = controlInput.cloneNode();
+  controlInput.insertAdjacentElement('afterend', newRow);
   newRow.value = '';
-  listOfDisplayOptions[elementId].checkOptions[checkboxInputs.length - 1] = newRow.value;
+  listOfDisplayOptions[elementId].controlOptions[controlInputs.length - 1] = newRow.value;
   let elementObject = document.getElementById(elementId);
-  let index = checkboxInputs.length - 1;
+  let index = controlInputs.length - 1;
   newRow.addEventListener('keyup', event => {
-    updateCheckboxOption(elementObject, newRow, index);
+    updateControlOption(elementObject, newRow, index);
   });
-}
-
-function updateRadioOption(currentElement, option, index) {
-  listOfDisplayOptions[currentElement.id].radioOptions[index] = option.value;
-}
-
-function addRadioOption(elementId) {
-  let radioInputs = document.getElementsByClassName('radioOption');
-  let radioInput = radioInputs[radioInputs.length - 1]
-  let newRow = radioInput.cloneNode();
-  radioInput.insertAdjacentElement('afterend', newRow);
-  newRow.value = '';
-  listOfDisplayOptions[elementId].radioOptions[radioInputs.length - 1] = newRow.value;
-  let elementObject = document.getElementById(elementId);
-  let index = radioInputs.length - 1;
-  newRow.addEventListener('keyup', event => {
-    updateRadioOption(elementObject, newRow, index);
-  });
-}
-
-function updateSelectOption(currentElement, option, index) {
-  listOfDisplayOptions[currentElement.id].selectOptions[index] = option.value;
-}
-
-function addSelectOption(elementId) {
-  let selectInputs = document.getElementsByClassName('selectOption');
-  let selectInput = selectInputs[selectInputs.length - 1]
-  let newRow = selectInput.cloneNode();
-  selectInput.insertAdjacentElement('afterend', newRow);
-  newRow.value = '';
-  listOfDisplayOptions[elementId].selectOptions[selectInputs.length - 1] = newRow.value;
-  let elementObject = document.getElementById(elementId);
-  let index = selectInputs.length - 1;
-  newRow.addEventListener('keyup', event => {
-    updateSelectOption(elementObject, newRow, index);
-  });
-}
-
-function updateSelectMultipleOption(currentElement, option, index) {
-  listOfDisplayOptions[currentElement.id].selectMultipleOptions[index] = option.value;
-}
-
-function addSelectMultipleOption(elementId) {
-  let selectMultipleInputs = document.getElementsByClassName('selectMultipleOption');
-  let selectMultipleInput = selectMultipleInputs[selectMultipleInputs.length - 1]
-  let newRow = selectMultipleInput.cloneNode();
-  selectMultipleInput.insertAdjacentElement('afterend', newRow);
-  newRow.value = '';
-  listOfDisplayOptions[elementId].selectMultipleOptions[selectMultipleInputs.length - 1] = newRow.value;
-  let elementObject = document.getElementById(elementId);
-  let index = selectMultipleInputs.length - 1;
-  newRow.addEventListener('keyup', event => {
-    updateSelectMultipleOption(elementObject, newRow, index);
+  newRow.addEventListener('change', event => {
+    updateControlOption(elementObject, newRow, index);
   });
 }
 
 function displayAppropriateOptions(elementObject) {
   let htmlToDisplay = "";
-  // console.log(elementObject)
+  let controlOptionsArray = listOfDisplayOptions[elementObject.id].controlOptions;
   switch(elementObject.type) {
     case 'title':
     htmlToDisplay += `
@@ -243,16 +189,15 @@ function displayAppropriateOptions(elementObject) {
     `;
     break;
     case 'checkbox':
-      let checkOptionsArray = listOfDisplayOptions[elementObject.id].checkOptions;
       htmlToDisplay += `
       <label>Label</label>
       <input type="text" class="checkLabel" value="${elementObject.label}"/>
       <br/>
       <label>Checkbox Options</label>`;
-      if(checkOptionsArray.length > 0) {
-        checkOptionsArray.forEach((option, index) => {
+      if(controlOptionsArray.length > 0) {
+        controlOptionsArray.forEach((option, index) => {
           htmlToDisplay += `
-          <input type="text" class="checkboxOption" value="${checkOptionsArray[index]}"/>`;
+          <input type="text" class="checkboxOption" value="${controlOptionsArray[index]}"/>`;
         });
       } else {
         htmlToDisplay += `
@@ -260,23 +205,22 @@ function displayAppropriateOptions(elementObject) {
       }
       htmlToDisplay += `
       <br/>
-      <button onclick="addCheckboxOption(${elementObject.id})">+ Add Option</button>
+      <button onclick="addControlOption(${elementObject.id}, 'checkboxOption')">+ Add Option</button>
       <br/>
       <label>Required</label>
       <input type="checkbox" class="checkRequired" ${elementObject.required ? 'checked' : ''}/>
       `;
     break;
     case 'radio':
-    let radioOptionsArray = listOfDisplayOptions[elementObject.id].radioOptions;
     htmlToDisplay += `
     <label>Label</label>
     <input type="text" class="radioLabel" value="${elementObject.label}"/>
     <br/>
       <label>Radio Options</label>`;
-      if(radioOptionsArray.length > 0) {
-        radioOptionsArray.forEach((option, index) => {
+      if(controlOptionsArray.length > 0) {
+        controlOptionsArray.forEach((option, index) => {
           htmlToDisplay += `
-          <input type="text" class="radioOption" value="${radioOptionsArray[index]}"/>`;
+          <input type="text" class="radioOption" value="${controlOptionsArray[index]}"/>`;
         });
       } else {
         htmlToDisplay += `
@@ -284,23 +228,22 @@ function displayAppropriateOptions(elementObject) {
       }
       htmlToDisplay += `
       <br/>
-      <button onclick="addRadioOption(${elementObject.id})">+ Add Option</button>
+      <button onclick="addControlOption(${elementObject.id}, 'radioOption')">+ Add Option</button>
       <br/>
       <label>Required</label>
       <input type="checkbox" class="radioRequired"${elementObject.required ? 'checked' : ''}/>
       `;
       break;
       case 'select':
-      let selectOptionsArray = listOfDisplayOptions[elementObject.id].selectOptions;
       htmlToDisplay += `
     <label>Label</label>
     <input type="text" class="selectLabel" value="${elementObject.label}"/>
     <br/>
     <label>Select Options</label>`;
-    if(selectOptionsArray.length > 0) {
-      selectOptionsArray.forEach((option, index) => {
+    if(controlOptionsArray.length > 0) {
+      controlOptionsArray.forEach((option, index) => {
         htmlToDisplay += `
-        <input type="text" class="selectOption" value="${selectOptionsArray[index]}"/>`;
+        <input type="text" class="selectOption" value="${controlOptionsArray[index]}"/>`;
       });
     } else {
       htmlToDisplay += `
@@ -308,23 +251,22 @@ function displayAppropriateOptions(elementObject) {
     }
     htmlToDisplay += `
     <br/>
-    <button onclick="addSelectOption(${elementObject.id})">+ Add Option</button>
+    <button onclick="addControlOption(${elementObject.id}, 'selectOption')">+ Add Option</button>
     <br/>
     <label>Required</label>
      <input type="checkbox" class="selectRequired" ${elementObject.required ? 'checked' : ''}/>
       `;
     break;
     case 'selectMultiple':
-      let selectMultipleOptionsArray = listOfDisplayOptions[elementObject.id].selectMultipleOptions;
       htmlToDisplay += `
       <label>Label</label>
       <input type="text" class="selectMultipleLabel" value="${elementObject.label}"/>
       <br/>
-      <label>SelectMultiple Options</label>`;
-      if(selectMultipleOptionsArray.length > 0) {
-        selectMultipleOptionsArray.forEach((option, index) => {
+      <label>Select Multiple Options</label>`;
+      if(controlOptionsArray.length > 0) {
+        controlOptionsArray.forEach((option, index) => {
           htmlToDisplay += `
-          <input type="text" class="selectMultipleOption" value="${selectMultipleOptionsArray[index]}"/>`;
+          <input type="text" class="selectMultipleOption" value="${controlOptionsArray[index]}"/>`;
         });
       } else {
         htmlToDisplay += `
@@ -332,7 +274,7 @@ function displayAppropriateOptions(elementObject) {
       }
       htmlToDisplay += `
       <br/>
-      <button onclick="addSelectMultipleOption(${elementObject.id})">+ Add Option</button>
+      <button onclick="addControlOption(${elementObject.id}, 'selectMultipleOption')">+ Add Option</button>
       <br/>
       <label>Required</label>
       <input type="checkbox" class="selectMultipleMultipleRequired" ${elementObject.required ? 'checked' : ''}/>
@@ -407,67 +349,47 @@ function displayAppropriateOptions(elementObject) {
   let optionsList = document.getElementById('optionsList');
   optionsList.innerHTML = '';
   optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
-  Array.from(document.getElementsByClassName('checkboxOption')).forEach(function(option, index) {
-    option.addEventListener('keyup', event => {
-      updateCheckboxOption(elementObject, option, index);
-    });
-  });
-  Array.from(document.getElementsByClassName('radioOption')).forEach(function(option, index) {
-    option.addEventListener('keyup', event => {
-      updateRadioOption(elementObject, option, index);
-    });
-  });
-  Array.from(document.getElementsByClassName('selectOption')).forEach(function(option, index) {
-    option.addEventListener('keyup', event => {
-      updateSelectOption(elementObject, option, index);
-    });
-  });
-
-  addOptionListeners('formTitleValue', elementObject, 'value');
-  addOptionListeners('headerValue', elementObject, 'value');
-  addOptionListeners('instructionsValue', elementObject, 'value');
-  addOptionListeners('checkLabel', elementObject, 'label');
-  addOptionListeners('radioLabel', elementObject, 'label');
-  addOptionListeners('selectLabel', elementObject, 'label');
-  addOptionListeners('selectMultipleLabel', elementObject, 'label');
-  addOptionListeners('textLabel', elementObject, 'label');
-  addOptionListeners('textareaLabel', elementObject, 'label');
-  addOptionListeners('dateLabel', elementObject, 'label');
-  addOptionListeners('timeLabel', elementObject, 'label');
-  addOptionListeners('numberLabel', elementObject, 'label');
-  addOptionListeners('emailLabel', elementObject, 'label');
-
-  addOptionListeners('textPlaceholder', elementObject, 'placeholder');
-  addOptionListeners('textareaPlaceholder', elementObject, 'placeholder');
-  addOptionListeners('numberPlaceholder', elementObject, 'placeholder');
-  addOptionListeners('emailPlaceholder', elementObject, 'placeholder');
-
-  addNumberListener('textMaxlength', elementObject, 'maxlength');
-  addNumberListener('textareaMaxlength', elementObject, 'maxlength');
-  addNumberListener('numberMaxlength', elementObject, 'maxlength');
-  addNumberListener('emailMaxlength', elementObject, 'maxlength');
-
-  addOptionCheckboxListener('checkRequired', elementObject, 'required');
-  addOptionCheckboxListener('radioRequired', elementObject, 'required');
-  addOptionCheckboxListener('selectRequired', elementObject, 'required');
-  addOptionCheckboxListener('selectMultipleRequired', elementObject, 'required');
-  addOptionCheckboxListener('textRequired', elementObject, 'required');
-  addOptionCheckboxListener('textareaRequired', elementObject, 'required');
-  addOptionCheckboxListener('dateRequired', elementObject, 'required');
-  addOptionCheckboxListener('timeRequired', elementObject, 'required');
-  addOptionCheckboxListener('numberRequired', elementObject, 'required');
-  addOptionCheckboxListener('emailRequired', elementObject, 'required');
-
-
-
-
   
+  // add event listeners to all the multiple options inputs
+  let optionClasses = ['checkboxOption','radioOption','selectOption'];
+  optionClasses.forEach(optionClass => {
+    Array.from(document.getElementsByClassName(optionClass)).forEach(function(option, index) {
+      option.addEventListener('keyup', event => {
+        updateControlOption(elementObject, option, index);
+      });
+    });
+  });
+
+  // add listeners to all the inputs in the options area
+  let controlsValueArray = ['formTitleValue','headerValue','instructionsValue'];
+  controlsValueArray.forEach(controlValue => {
+    addOptionListeners(controlValue, elementObject, 'value');
+  });
+
+  let controlsLabelArray = ['checkLabel', 'radioLabel', 'selectLabel', 'selectMultipleLabel', 'textLabel', 'textareaLabel', 'dateLabel', 'timeLabel', 'numberLabel', 'emailLabel'];
+  controlsLabelArray.forEach(controlLabel => {
+    addOptionListeners(controlLabel, elementObject, 'label');
+  });
+
+  let controlsPlaceholderArray = ['textPlaceholder', 'textareaPlaceholder', 'numberPlaceholder', 'emailPlaceholder'];
+  controlsPlaceholderArray.forEach(controlPlaceholder => {
+    addOptionListeners(controlPlaceholder, elementObject, 'placeholder');
+  });
+
+  let controlsMaxlengthArray = ['textMaxlength', 'textareaMaxlength', 'numberMaxlength', 'emailMaxlength'];
+  controlsMaxlengthArray.forEach(controlMaxlength => {
+    addNumberListener(controlMaxlength, elementObject, 'maxlength');
+  });
+
+  let controlsRequiredArray = ['checkRequired', 'radioRequired', 'selectRequired', 'selectMultipleRequired', 'textRequired', 'textareaRequired', 'dateRequired', 'timeRequired', 'numberRequired', 'emailRequired'];
+  controlsRequiredArray.forEach(controlRequired => {
+    addOptionCheckboxListener(controlRequired, elementObject, 'required');
+  });  
 }
 
 function addOptionListeners(className, elementObject, prop) {
   Array.from(document.getElementsByClassName(className)).forEach(function (element) {
     element.addEventListener('keyup', function() {
-      // console.log(listOfDisplayOptions[elementObject.id])
       listOfDisplayOptions[elementObject.id][prop] = element['value'];
       const control = document.getElementById(elementObject.id);
       if (prop === 'value' || prop === 'label') {
@@ -486,7 +408,6 @@ function addOptionListeners(className, elementObject, prop) {
 function addNumberListener(className, elementObject, prop) {
   Array.from(document.getElementsByClassName(className)).forEach(function (element) {
     element.addEventListener('change', function() {
-      // console.log(listOfDisplayOptions[elementObject.id])
       listOfDisplayOptions[elementObject.id][prop] = element['value'];
       const control = document.getElementById(elementObject.id);
       if (prop === 'maxlength') {
@@ -499,7 +420,6 @@ function addNumberListener(className, elementObject, prop) {
 function addOptionCheckboxListener(className, elementObject, prop) {
   Array.from(document.getElementsByClassName(className)).forEach(function (element) {
     element.addEventListener('change', function() {
-      console.log(listOfDisplayOptions[elementObject.id][prop])
       listOfDisplayOptions[elementObject.id][prop] = listOfDisplayOptions[elementObject.id][prop] ? false : true;
       const control = document.getElementById(elementObject.id);
       if (prop === 'required') {
