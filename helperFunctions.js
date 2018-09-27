@@ -44,8 +44,6 @@ function createDuplicateButton() {
 function createFormInput(inputType) {
   let input;
   switch (inputType) {
-    // case '':
-    //   break;
     case 'textarea':
       input = document.createElement('textarea');
       break;
@@ -76,7 +74,7 @@ function turnToFormControl(node) {
   addDeleteListener(deleteButton);
   
   const duplicateButton = createDuplicateButton();
-  node.prepend(duplicateButton);
+  node.append(duplicateButton);
   addDuplicateListener(duplicateButton);
 
   controlClickDisplayOptions(node);
@@ -424,7 +422,7 @@ function addOptionCheckboxListener(className, elementObject, prop) {
       const control = document.getElementById(elementObject.id);
       if (prop === 'required') {
         if (listOfDisplayOptions[elementObject.id][prop]) {
-          control.getElementsByClassName('requiredDisplay')[0].textContent = 'Required';
+          control.getElementsByClassName('requiredDisplay')[0].textContent = '*';
         } else {
           control.getElementsByClassName('requiredDisplay')[0].textContent = '';          
         }
