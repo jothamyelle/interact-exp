@@ -16,8 +16,9 @@ function handleDragOver(event) {
     event.preventDefault(); // Necessary. Allows us to drop.
   }
   getTargetMiddle(this);
+  let yOffset=Math.max(document.documentElement.scrollTop,document.body.scrollTop);
 
-  if(event.clientY < targetMiddle) {
+  if(event.clientY + yOffset < targetMiddle) {
     this.classList.add('over-top');
     this.classList && this.classList.contains('over-bottom') ? this.classList.remove('over-bottom') : false;
   } else {

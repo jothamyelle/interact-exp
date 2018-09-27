@@ -206,11 +206,12 @@ function updateStagingAreaHTML(currentElement, type) {
       });
     break;
   }
-
+  
   let deleteButton = document.getElementById(`control${currentElement.id}DeleteButton`);
   let duplicateButton = document.getElementById(`control${currentElement.id}DuplicateButton`);
   addDeleteListener(deleteButton);
   addDuplicateListener(duplicateButton);
+  
   // controlClickDisplayOptions(currentElement);
 }
 function addControlOption(elementId, className) {
