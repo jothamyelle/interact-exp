@@ -166,7 +166,6 @@ function updateStagingAreaHTML(currentElement, type) {
   // get the number of rows currently there and then loop through and create a checkbox/dropdown/radio option for each
   let htmlToDisplay = "";
   let controlOptionsArray = listOfDisplayOptions[currentElement.id].controlOptions;
-  console.log("controlOptionsArray:", controlOptionsArray);
   let controlInStagingArea = document.getElementById(currentElement.id);
   
   controlInStagingArea.innerHTML = `
@@ -205,7 +204,7 @@ function updateStagingAreaHTML(currentElement, type) {
   let duplicateButton = document.getElementById(`control${currentElement.id}DuplicateButton`);
   addDeleteListener(deleteButton);
   addDuplicateListener(duplicateButton);
-  controlClickDisplayOptions(currentElement);
+  // controlClickDisplayOptions(currentElement);
 }
 function addControlOption(elementId, className) {
   let controlInputs = document.getElementsByClassName(className);
@@ -226,7 +225,6 @@ function addControlOption(elementId, className) {
 }
 
 function displayAppropriateOptions(elementObject) {
-  console.log("elementObject:", elementObject);
   let htmlToDisplay = "";
   let controlOptionsArray = listOfDisplayOptions[elementObject.id].controlOptions;
   switch(elementObject.type) {
@@ -584,7 +582,7 @@ function addSaveButtonListener() {
   const saveButton = document.getElementById('saveButton');
   const savedFormTemplate = [];
   saveButton.addEventListener('click', function() { 
-    console.log(JSON.stringify(listOfDisplayOptions));
+    // console.log(JSON.stringify(listOfDisplayOptions));
     return JSON.stringify(savedFormTemplate);
   })
 }
