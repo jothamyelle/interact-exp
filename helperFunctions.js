@@ -44,8 +44,6 @@ function createDuplicateButton() {
 function createFormInput(inputType) {
   let input;
   switch (inputType) {
-    // case '':
-    //   break;
     case 'textarea':
       input = document.createElement('textarea');
       break;
@@ -53,7 +51,7 @@ function createFormInput(inputType) {
       input = document.createElement('select');
       break;
     case 'select multiple':
-      input = document.createElement('select');
+      input = document.createElement('select multiple');
       input.setAttribute('multiple', '');
       break;
     default:
@@ -65,11 +63,11 @@ function createFormInput(inputType) {
 
 function turnToFormControl(node) {
 
-  const inputType = node.dataset.type;
-  // Doesn't add forn fields for Title, Header and Instructions
-  if (inputType) {
-    node.append(createFormInput(inputType));
-  }
+  // const inputType = "node:", node.dataset.type;
+  // // Doesn't add forn fields for Title, Header and Instructions
+  // if (inputType) {
+  //   node.append(createFormInput(inputType));
+  // }
 
   const deleteButton = createDeleteButton();
   node.append(deleteButton);
@@ -149,6 +147,60 @@ function createAppropriateOptionsList(currentElement) {
 function updateControlOption(currentElement, option, index) {
   listOfDisplayOptions[currentElement.id].controlOptions[index] = option.value;
 }
+function updateStagingAreaHTML(currentElement, type) {
+  let labelName = "";
+  let inputType = "";
+  if(type.includes('radio')) {
+    labelName = "Radio";
+    inputType = 'radio';
+  } else if (type.includes('check')) {
+    labelName = "Checkbox";
+    inputType = 'checkbox';
+  } else if (type.includes('Multiple')) {
+    labelName = "Select Multiple";
+    inputType = 'select multiple';
+  } else {
+    labelName = "Select";
+    inputType = 'select';
+  }
+  // get the number of rows currently there and then loop through and create a checkbox/dropdown/radio option for each
+  let htmlToDisplay = "";
+  let controlOptionsArray = listOfDisplayOptions[currentElement.id].controlOptions;
+  console.log("controlOptionsArray:", controlOptionsArray);
+  let controlInStagingArea = document.getElementById(currentElement.id);
+  
+  controlInStagingArea.innerHTML = `
+  <button class="duplicateControl">Duplicate</button>
+  <span class="requiredDisplay"></span><br>
+  <label>${labelName}</label>
+  <div id="control${currentElement.id}MultiOptions"></div>
+  <button class="deleteControl">Delete</button></div>`;
+
+  let multiOptionsDiv = document.getElementById(`control${currentElement.id}MultiOptions`);
+
+  switch(inputType) {
+    case 'select':
+    case 'select multiple':
+      let selectHTML = `<${inputType}>`;
+      controlOptionsArray.forEach((option, index) => {
+        selectHTML += `<option>${controlOptionsArray[index]}</option>
+        `;
+      });
+      selectHTML += `</select>`;
+      multiOptionsDiv.innerHTML = selectHTML;
+    break;
+    default:
+    controlOptionsArray.forEach((option, index) => {
+      multiOptionsDiv.innerHTML += `
+        <p>
+        <label>${controlOptionsArray[index]}</label>  
+        <input type="${inputType}" class="checkboxOption" value="${controlOptionsArray[index]}"/>
+        </p>
+        `;
+      });
+    break;
+  }
+}
 function addControlOption(elementId, className) {
   let controlInputs = document.getElementsByClassName(className);
   let controlInput = controlInputs[controlInputs.length - 1]
@@ -163,6 +215,7 @@ function addControlOption(elementId, className) {
   });
   newRow.addEventListener('change', event => {
     updateControlOption(elementObject, newRow, index);
+    updateStagingAreaHTML(elementObject, className);
   });
 }
 
@@ -356,6 +409,9 @@ function displayAppropriateOptions(elementObject) {
     Array.from(document.getElementsByClassName(optionClass)).forEach(function(option, index) {
       option.addEventListener('keyup', event => {
         updateControlOption(elementObject, option, index);
+      });
+      option.addEventListener('change', event => {
+        updateStagingAreaHTML(elementObject, optionClass);
       });
     });
   });
