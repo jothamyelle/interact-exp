@@ -1,8 +1,3 @@
-/* 
-  BUG FIX: 
-    - drag is not finding the bottom half of the element
-*/
-
 // gets the current object's location in the window
 function offset(currentElement) {
   let rect = currentElement.getBoundingClientRect(),
@@ -157,11 +152,12 @@ function createAppropriateOptionsList(currentElement) {
 }
 
 function updateControlOption(currentElement, option, index) {
+  console.log("asdf", currentElement.id);
   listOfDisplayOptions[currentElement.id].controlOptions[index] = option.value;
 }
+
 function updateStagingAreaHTML(element, type) {
   let currentElement = listOfDisplayOptions[element.id];
-  console.log("currentElement:", currentElement);
   let labelName = "";
   let inputType = "";
   if(type.includes('radio')) {
@@ -196,6 +192,7 @@ function updateStagingAreaHTML(element, type) {
     case 'select multiple':
       let selectHTML = `<${inputType}>`;
       controlOptionsArray.forEach((option, index) => {
+        console.log("option:", option);
         selectHTML += `<option>${controlOptionsArray[index]}</option>
         `;
       });
@@ -218,7 +215,6 @@ function updateStagingAreaHTML(element, type) {
   let duplicateButton = document.getElementById(`control${currentElement.id}DuplicateButton`);
   addDeleteListener(deleteButton);
   addDuplicateListener(duplicateButton);
-  // controlClickDisplayOptions(currentElement);
 }
 function addControlOption(elementId, className) {
   let controlInputs = document.getElementsByClassName(className);
@@ -574,11 +570,16 @@ function addDuplicateListener(button) {
       type: listOfDisplayOptions[control.id].type,
       value: listOfDisplayOptions[control.id].value,
       label: listOfDisplayOptions[control.id].label,
-      controlOptions: listOfDisplayOptions[control.id].controlOptions,
+      controlOptions: [],
       required: listOfDisplayOptions[control.id].required,
       multiple: listOfDisplayOptions[control.id].multiple,
       maxlength: listOfDisplayOptions[control.id].maxlength,
       placeholder: listOfDisplayOptions[control.id].placeholder };
+
+      listOfDisplayOptions[control.id].controlOptions.forEach(option => {
+        listOfDisplayOptions[clone.id].controlOptions.push(option);
+      });
+
     displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
   })
