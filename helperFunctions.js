@@ -479,8 +479,8 @@ function addDeleteListener(button) {
 
 function addDuplicateListener(button) {
   button.addEventListener('click', function() {
-    listOfDisplayOptions[0].id = 0; // control id = 0
-    console.log("display options:", listOfDisplayOptions); // control id = 0
+    listOfDisplayOptions[0].id = 0;
+    console.log("display options:", listOfDisplayOptions); 
 
     const control = button.parentElement;
     const clone = control.cloneNode(true);
@@ -490,11 +490,9 @@ function addDuplicateListener(button) {
     const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
     addDuplicateListener(cloneDuplicate);
     clone.setAttribute('id', idCounter++);
-    // console.log("control id:", listOfDisplayOptions[control.id].id); // control id = 0
-    const clone_id = clone.id; // clone id = 1
+    const clone_id = clone.id;
     control.insertAdjacentElement('afterend', clone);
     addAllEventListeners(clone);
-    // createAppropriateOptionsList(clone);
 
     listOfDisplayOptions[clone.id] = {id: parseInt(clone.id),
       type: listOfDisplayOptions[control.id].type,
@@ -505,8 +503,6 @@ function addDuplicateListener(button) {
       multiple: listOfDisplayOptions[control.id].multiple,
       maxlength: listOfDisplayOptions[control.id].maxlength,
       placeholder: listOfDisplayOptions[control.id].placeholder };
-    // clone.id = clone_id;
-    // listOfDisplayOptions[clone.id].id = clone_id; 
     displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
   })
