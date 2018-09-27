@@ -483,7 +483,6 @@ function addDuplicateListener(button) {
   button.addEventListener('click', function() {
     const control = button.parentElement;
     const clone = control.cloneNode(true);
-    
     const cloneDelete = clone.getElementsByClassName('deleteControl')[0];
     addDeleteListener(cloneDelete);
     
@@ -493,6 +492,8 @@ function addDuplicateListener(button) {
     control.insertAdjacentElement('afterend', clone);
     addAllEventListeners(clone);
     createAppropriateOptionsList(clone);
+    listOfDisplayOptions[clone.id] = listOfDisplayOptions[control.id];
+    displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
   })
 }
