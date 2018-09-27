@@ -404,7 +404,7 @@ function displayAppropriateOptions(elementObject) {
   optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
   
   // add event listeners to all the multiple options inputs
-  let optionClasses = ['checkboxOption','radioOption','selectOption'];
+  let optionClasses = ['checkboxOption','radioOption','selectOption', 'selectMultipleOption'];
   optionClasses.forEach(optionClass => {
     Array.from(document.getElementsByClassName(optionClass)).forEach(function(option, index) {
       option.addEventListener('keyup', event => {
