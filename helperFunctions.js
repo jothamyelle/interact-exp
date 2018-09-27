@@ -161,12 +161,14 @@ function addControlOption(elementId, className) {
   newRow.addEventListener('keyup', event => {
     updateControlOption(elementObject, newRow, index);
   });
+  newRow.addEventListener('change', event => {
+    updateControlOption(elementObject, newRow, index);
+  });
 }
 
 function displayAppropriateOptions(elementObject) {
   let htmlToDisplay = "";
   let controlOptionsArray = listOfDisplayOptions[elementObject.id].controlOptions;
-  console.log("listOfDisplayOptions[elementObject.id]:", listOfDisplayOptions[elementObject.id])
   switch(elementObject.type) {
     case 'title':
     htmlToDisplay += `
@@ -388,7 +390,6 @@ function displayAppropriateOptions(elementObject) {
 function addOptionListeners(className, elementObject, prop) {
   Array.from(document.getElementsByClassName(className)).forEach(function (element) {
     element.addEventListener('keyup', function() {
-      // console.log(listOfDisplayOptions[elementObject.id])
       listOfDisplayOptions[elementObject.id][prop] = element['value'];
       const control = document.getElementById(elementObject.id);
       if (prop === 'value' || prop === 'label') {
@@ -407,7 +408,6 @@ function addOptionListeners(className, elementObject, prop) {
 function addNumberListener(className, elementObject, prop) {
   Array.from(document.getElementsByClassName(className)).forEach(function (element) {
     element.addEventListener('change', function() {
-      // console.log(listOfDisplayOptions[elementObject.id])
       listOfDisplayOptions[elementObject.id][prop] = element['value'];
       const control = document.getElementById(elementObject.id);
       if (prop === 'maxlength') {
@@ -420,7 +420,6 @@ function addNumberListener(className, elementObject, prop) {
 function addOptionCheckboxListener(className, elementObject, prop) {
   Array.from(document.getElementsByClassName(className)).forEach(function (element) {
     element.addEventListener('change', function() {
-      console.log(listOfDisplayOptions[elementObject.id][prop])
       listOfDisplayOptions[elementObject.id][prop] = listOfDisplayOptions[elementObject.id][prop] ? false : true;
       const control = document.getElementById(elementObject.id);
       if (prop === 'required') {
