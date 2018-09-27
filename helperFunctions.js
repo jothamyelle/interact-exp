@@ -1,3 +1,10 @@
+/* 
+  BUG FIX: 
+    - multi-select controls all switched back to their default labels when I changed the options
+    - anything that's not a multi-option input field is not showing up
+    - drag is not finding the bottom half of the element
+*/
+
 // gets the current object's location in the window
 function offset(currentElement) {
   let rect = currentElement.getBoundingClientRect(),
@@ -74,7 +81,7 @@ function turnToFormControl(node) {
   addDeleteListener(deleteButton);
   
   const duplicateButton = createDuplicateButton();
-  node.prepend(duplicateButton);
+  node.append(duplicateButton);
   addDuplicateListener(duplicateButton);
 
   controlClickDisplayOptions(node);
@@ -485,7 +492,7 @@ function addOptionCheckboxListener(className, elementObject, prop) {
       const control = document.getElementById(elementObject.id);
       if (prop === 'required') {
         if (listOfDisplayOptions[elementObject.id][prop]) {
-          control.getElementsByClassName('requiredDisplay')[0].textContent = 'Required';
+          control.getElementsByClassName('requiredDisplay')[0].textContent = '*';
         } else {
           control.getElementsByClassName('requiredDisplay')[0].textContent = '';          
         }
@@ -509,7 +516,6 @@ function handleDropPlacement(currentElement) {
 }
 
 function controlClickDisplayOptions(node) {
-  console.log(node);
   node.addEventListener('click', function() {
     displayAppropriateOptions(listOfDisplayOptions[node.id]);
   })
@@ -543,18 +549,29 @@ function addDeleteListener(button) {
 
 function addDuplicateListener(button) {
   button.addEventListener('click', function() {
+    listOfDisplayOptions[0].id = 0;
+
     const control = button.parentElement;
     const clone = control.cloneNode(true);
     const cloneDelete = clone.getElementsByClassName('deleteControl')[0];
     addDeleteListener(cloneDelete);
     
     const cloneDuplicate = clone.getElementsByClassName('duplicateControl')[0];
-    addDuplicateListener(cloneDuplicate); // adds listener to the clone
-    clone.setAttribute('id', idCounter++) // sets the HTML id attribute to the new id
-    listOfDisplayOptions[clone.id] = listOfDisplayOptions[control.id]; // 
-    control.insertAdjacentElement('afterend', clone); // sets the new element in place in the staging area
-    addAllEventListeners(clone); // adds all drag and drop listeners
-    createAppropriateOptionsList(clone); // creates options list based on that element's id
+    addDuplicateListener(cloneDuplicate);
+    clone.setAttribute('id', idCounter++);
+    const clone_id = clone.id;
+    control.insertAdjacentElement('afterend', clone);
+    addAllEventListeners(clone);
+
+    listOfDisplayOptions[clone.id] = {id: parseInt(clone.id),
+      type: listOfDisplayOptions[control.id].type,
+      value: listOfDisplayOptions[control.id].value,
+      label: listOfDisplayOptions[control.id].label,
+      controlOptions: listOfDisplayOptions[control.id].controlOptions,
+      required: listOfDisplayOptions[control.id].required,
+      multiple: listOfDisplayOptions[control.id].multiple,
+      maxlength: listOfDisplayOptions[control.id].maxlength,
+      placeholder: listOfDisplayOptions[control.id].placeholder };
     displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
   })
@@ -582,7 +599,7 @@ function addSaveButtonListener() {
   const saveButton = document.getElementById('saveButton');
   const savedFormTemplate = [];
   saveButton.addEventListener('click', function() { 
-    // console.log(JSON.stringify(listOfDisplayOptions));
+    console.log(JSON.stringify(listOfDisplayOptions));
     return JSON.stringify(savedFormTemplate);
   })
 }

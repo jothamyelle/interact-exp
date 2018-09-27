@@ -1,97 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>InForm Builder</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-</head>
-<body>
-  <div class="formBuildArea">
-    
-    <div id="stagingArea">
-      
-      <div id="beginnerItem" class="staged">Drop Stuff Here</div>
-      
-    </div>
-
-    <div id="options">
-      <div id="optionsList"></div>
-    </div>
-    <div id="controls">
-      
-        <div class="controls" draggable="true" title="Form Title" data-type="">
-            <label>Title</label>
-        </div>
-
-        <div class="controls" draggable="true" title="Section Header" data-type="">
-            <label>Header</label>
-        </div>
-  
-        <div class="controls" draggable="true" title="Question or instructions to fill the field" data-type="">
-            <label>Instructions</label>
-        </div>
-  
-        <div class="controls" draggable="true" title="Checkbox" data-type="checkbox">
-            <span class="requiredDisplay"></span><br/>
-            <label>Checkbox</label>
-        </div>
-
-        <div class="controls" draggable="true" title="Radio Button" data-type="radio">
-            <span class="requiredDisplay"></span><br/>
-            <label>Radio Button</label>
-        </div>
-  
-        <div class="controls" draggable="true" title="Select" data-type="select">
-            <span class="requiredDisplay"></span><br/> 
-            <label>Select</label>
-        </div>
-
-        <div class="controls" draggable="true" title="Select Multiple" data-type="select multiple">
-            <span class="requiredDisplay"></span><br/>
-            <label>Select Multiple</label>
-        </div>
-  
-        <div class="controls" draggable="true" title="Text" data-type="text">
-            <span class="maxlengthDisplay"></span><br/>
-            <span class="requiredDisplay"></span><br/>
-            <label>Text</label>
-        </div>
-
-        <div class="controls" draggable="true" title="Text Area" data-type="textarea">
-            <span class="maxlengthDisplay"></span><br/> 
-            <span class="requiredDisplay"></span><br/>
-            <label>Text Area</label>
-        </div>
-
-        <div class="controls" draggable="true" title="Date" data-type="date">
-            <span class="requiredDisplay"></span><br/>
-            <label>Date</label>
-        </div>
-
-        <div class="controls" draggable="true" title="Time" data-type="time">
-            <span class="requiredDisplay"></span><br/>
-            <label>Time</label>
-        </div>
-
-        <div class="controls" draggable="true" title="Number" data-type="number">
-            <span class="maxlengthDisplay"></span><br/>
-            <span class="requiredDisplay"></span><br/>
-            <label>Number</label>
-        </div>
-
-        <div class="controls" draggable="true" title="Email" data-type="email">
-            <span class="maxlengthDisplay"></span><br/>
-            <span class="requiredDisplay"></span><br/>
-            <label>Email</label>
-        </div>
-
-    </div>
-  </div>
-  <button id="resetButton">Reset</button>
-  <button id="saveButton">Save</button>
-  <script src="helperFunctions.js"></script>
-  <script src="main.js"></script>
-</body>
+    <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>InForm Builder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    </head>
+    <body>
+    <script src="render-starting-point.js"></script>
+    <script src="helperFunctions.js"></script>
+    <script src="main.js"></script>
+    </body>
 </html>
