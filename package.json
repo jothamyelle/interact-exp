@@ -1,15 +1,27 @@
 {
-  "name": "interact-exp",
+  "name": "inform-builder",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "Vanilla JS drag and drop form builder",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "interactjs": "^1.3.4"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jothamyelle/inform-builder.git"
+  },
+  "keywords": [
+    "form",
+    "form-builder",
+    "builder",
+    "vanilla",
+    "javascript",
+    "awesome"
+  ],
+  "author": "Ben Deltenre, Jotham Yelle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jothamyelle/inform-builder/issues"
+  },
+  "homepage": "https://github.com/jothamyelle/inform-builder#readme"
 }
