@@ -1,3 +1,11 @@
+/*
+  BUGS:
+    - can't drop elements beneath an existing element
+    - changing the maxlength in text, number, textarea, email
+      results in a console log error (probably trying to write html to a nonexistent element)
+    - checkbox not replacing option value on change, just adding to it
+*/
+
 // gets the current object's location in the window
 function offset(currentElement) {
   let rect = currentElement.getBoundingClientRect(),
@@ -569,13 +577,15 @@ function addDuplicateListener(button) {
       type: listOfDisplayOptions[control.id].type,
       value: listOfDisplayOptions[control.id].value,
       label: listOfDisplayOptions[control.id].label,
-      controlOptions: listOfDisplayOptions[control.id].controlOptions.map(option => {
-        listOfDisplayOptions[clone.id].controlOptions.push(option);
-      }),
+      controlOptions: [],
       required: listOfDisplayOptions[control.id].required,
       multiple: listOfDisplayOptions[control.id].multiple,
       maxlength: listOfDisplayOptions[control.id].maxlength,
       placeholder: listOfDisplayOptions[control.id].placeholder };
+
+      listOfDisplayOptions[control.id].controlOptions.forEach(option => {
+        listOfDisplayOptions[clone.id].controlOptions.push(option);
+      });
 
     displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
