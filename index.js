@@ -680,7 +680,6 @@ exports.informBuilder = function() {
     const saveButton = document.getElementById('saveButton');
     const savedFormTemplate = [];
     saveButton.addEventListener('click', function() { 
-      console.log(JSON.stringify(listOfDisplayOptions));
       return JSON.stringify(savedFormTemplate);
     })
   }
