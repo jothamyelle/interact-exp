@@ -208,12 +208,13 @@ function updateStagingAreaHTML(element, type) {
       });
     break;
   }
-
+  
   let deleteButton = document.getElementById(`control${currentElement.id}DeleteButton`);
   let duplicateButton = document.getElementById(`control${currentElement.id}DuplicateButton`);
   addDeleteListener(deleteButton);
   addDuplicateListener(duplicateButton);
 }
+
 function addControlOption(elementId, className) {
   let controlInputs = document.getElementsByClassName(className);
   let controlInput = controlInputs[controlInputs.length - 1]
