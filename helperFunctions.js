@@ -152,7 +152,6 @@ function createAppropriateOptionsList(currentElement) {
 }
 
 function updateControlOption(currentElement, option, index) {
-  console.log("asdf", currentElement.id);
   listOfDisplayOptions[currentElement.id].controlOptions[index] = option.value;
 }
 
@@ -192,7 +191,6 @@ function updateStagingAreaHTML(element, type) {
     case 'select multiple':
       let selectHTML = `<${inputType}>`;
       controlOptionsArray.forEach((option, index) => {
-        console.log("option:", option);
         selectHTML += `<option>${controlOptionsArray[index]}</option>
         `;
       });
