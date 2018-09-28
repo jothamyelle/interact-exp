@@ -17,7 +17,7 @@ function offset(currentElement) {
 // takes the current element and returns it's middle Y value
 function getTargetMiddle(currentElement) {
   let divHeight = currentElement.offsetHeight;
-  let targetPositionYTop = offset(currentElement).top;
+  let targetPositionYTop = Math.max(document.documentElement.scrollTop,document.body.scrollTop);
   let targetPositionYBottom = targetPositionYTop + divHeight;
   targetMiddle = ((targetPositionYBottom - targetPositionYTop) / 2) + targetPositionYTop;
 }
@@ -488,9 +488,6 @@ function addNumberListener(className, elementObject, prop) {
     element.addEventListener('change', function() {
       listOfDisplayOptions[elementObject.id][prop] = element['value'];
       const control = document.getElementById(elementObject.id);
-      if (prop === 'maxlength') {
-        control.getElementsByClassName('maxlengthDisplay')[0].textContent = `Maxlength: ${element.value} characters`;
-      }
     })
   })
 }
