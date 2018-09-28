@@ -570,15 +570,13 @@ function addDuplicateListener(button) {
       type: listOfDisplayOptions[control.id].type,
       value: listOfDisplayOptions[control.id].value,
       label: listOfDisplayOptions[control.id].label,
-      controlOptions: [],
+      controlOptions: listOfDisplayOptions[control.id].controlOptions.map(option => {
+        listOfDisplayOptions[clone.id].controlOptions.push(option);
+      }),
       required: listOfDisplayOptions[control.id].required,
       multiple: listOfDisplayOptions[control.id].multiple,
       maxlength: listOfDisplayOptions[control.id].maxlength,
       placeholder: listOfDisplayOptions[control.id].placeholder };
-
-      listOfDisplayOptions[control.id].controlOptions.forEach(option => {
-        listOfDisplayOptions[clone.id].controlOptions.push(option);
-      });
 
     displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
