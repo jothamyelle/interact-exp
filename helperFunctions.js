@@ -1,8 +1,9 @@
-/* 
-  BUG FIX: 
-    - multi-select controls all switched back to their default labels when I changed the options
-    - anything that's not a multi-option input field is not showing up
-    - drag is not finding the bottom half of the element
+/*
+  BUGS:
+    - can't drop elements beneath an existing element
+    - changing the maxlength in text, number, textarea, email
+      results in a console log error (probably trying to write html to a nonexistent element)
+    - checkbox not replacing option value on change, just adding to it
 */
 
 // gets the current object's location in the window
@@ -69,12 +70,20 @@ function createFormInput(inputType) {
 }
 
 function turnToFormControl(node) {
-
-  // const inputType = "node:", node.dataset.type;
-  // // Doesn't add forn fields for Title, Header and Instructions
-  // if (inputType) {
-  //   node.append(createFormInput(inputType));
-  // }
+  const inputType = node.dataset.type;
+  if (inputType) {
+    let correctDataTypes = [
+      'text',
+      'textarea',
+      'date',
+      'time',
+      'number',
+      'email'
+    ]
+    if(correctDataTypes.includes(inputType)) {
+      node.append(createFormInput(inputType));
+    }
+  }
 
   const deleteButton = createDeleteButton();
   node.append(deleteButton);
@@ -150,24 +159,25 @@ function createAppropriateOptionsList(currentElement) {
   listOfDisplayOptions[currentElement.id] = options;
 }
 
-// try to refactor all the above functions into one general control option function
 function updateControlOption(currentElement, option, index) {
   listOfDisplayOptions[currentElement.id].controlOptions[index] = option.value;
 }
-function updateStagingAreaHTML(currentElement, type) {
+
+function updateStagingAreaHTML(element, type) {
+  let currentElement = listOfDisplayOptions[element.id];
   let labelName = "";
   let inputType = "";
   if(type.includes('radio')) {
-    labelName = "Radio";
+    labelName = currentElement.label || "Radio";
     inputType = 'radio';
   } else if (type.includes('check')) {
-    labelName = "Checkbox";
+    labelName = currentElement.label || "Checkbox";
     inputType = 'checkbox';
   } else if (type.includes('Multiple')) {
-    labelName = "Select Multiple";
+    labelName = currentElement.label || "Select Multiple";
     inputType = 'select multiple';
   } else {
-    labelName = "Select";
+    labelName = currentElement.label || "Select";
     inputType = 'select';
   }
   // get the number of rows currently there and then loop through and create a checkbox/dropdown/radio option for each
@@ -199,8 +209,8 @@ function updateStagingAreaHTML(currentElement, type) {
     controlOptionsArray.forEach((option, index) => {
       multiOptionsDiv.innerHTML += `
         <p>
-        <label>${controlOptionsArray[index]}</label>  
         <input type="${inputType}" class="checkboxOption" value="${controlOptionsArray[index]}"/>
+        <label>${controlOptionsArray[index]}</label>  
         </p>
         `;
       });
@@ -211,9 +221,8 @@ function updateStagingAreaHTML(currentElement, type) {
   let duplicateButton = document.getElementById(`control${currentElement.id}DuplicateButton`);
   addDeleteListener(deleteButton);
   addDuplicateListener(duplicateButton);
-  
-  // controlClickDisplayOptions(currentElement);
 }
+
 function addControlOption(elementId, className) {
   let controlInputs = document.getElementsByClassName(className);
   let controlInput = controlInputs[controlInputs.length - 1]
@@ -568,11 +577,16 @@ function addDuplicateListener(button) {
       type: listOfDisplayOptions[control.id].type,
       value: listOfDisplayOptions[control.id].value,
       label: listOfDisplayOptions[control.id].label,
-      controlOptions: listOfDisplayOptions[control.id].controlOptions,
+      controlOptions: [],
       required: listOfDisplayOptions[control.id].required,
       multiple: listOfDisplayOptions[control.id].multiple,
       maxlength: listOfDisplayOptions[control.id].maxlength,
       placeholder: listOfDisplayOptions[control.id].placeholder };
+
+      listOfDisplayOptions[control.id].controlOptions.forEach(option => {
+        listOfDisplayOptions[clone.id].controlOptions.push(option);
+      });
+
     displayAppropriateOptions(clone);
     controlClickDisplayOptions(clone);
   })
