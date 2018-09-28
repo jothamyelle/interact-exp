@@ -1,3 +1,10 @@
+/* 
+  BUG FIX: 
+    - multi-select controls all switched back to their default labels when I changed the options
+    - anything that's not a multi-option input field is not showing up
+    - drag is not finding the bottom half of the element
+*/
+
 // gets the current object's location in the window
 function offset(currentElement) {
   let rect = currentElement.getBoundingClientRect(),
@@ -51,7 +58,7 @@ function createFormInput(inputType) {
       input = document.createElement('select');
       break;
     case 'select multiple':
-      input = document.createElement('select');
+      input = document.createElement('select multiple');
       input.setAttribute('multiple', '');
       break;
     default:
@@ -63,11 +70,11 @@ function createFormInput(inputType) {
 
 function turnToFormControl(node) {
 
-  const inputType = node.dataset.type;
-  // Doesn't add forn fields for Title, Header and Instructions
-  if (inputType) {
-    node.append(createFormInput(inputType));
-  }
+  // const inputType = "node:", node.dataset.type;
+  // // Doesn't add forn fields for Title, Header and Instructions
+  // if (inputType) {
+  //   node.append(createFormInput(inputType));
+  // }
 
   const deleteButton = createDeleteButton();
   node.append(deleteButton);
@@ -147,6 +154,66 @@ function createAppropriateOptionsList(currentElement) {
 function updateControlOption(currentElement, option, index) {
   listOfDisplayOptions[currentElement.id].controlOptions[index] = option.value;
 }
+function updateStagingAreaHTML(currentElement, type) {
+  let labelName = "";
+  let inputType = "";
+  if(type.includes('radio')) {
+    labelName = "Radio";
+    inputType = 'radio';
+  } else if (type.includes('check')) {
+    labelName = "Checkbox";
+    inputType = 'checkbox';
+  } else if (type.includes('Multiple')) {
+    labelName = "Select Multiple";
+    inputType = 'select multiple';
+  } else {
+    labelName = "Select";
+    inputType = 'select';
+  }
+  // get the number of rows currently there and then loop through and create a checkbox/dropdown/radio option for each
+  let htmlToDisplay = "";
+  let controlOptionsArray = listOfDisplayOptions[currentElement.id].controlOptions;
+  let controlInStagingArea = document.getElementById(currentElement.id);
+  
+  controlInStagingArea.innerHTML = `
+  <button id="control${currentElement.id}DuplicateButton" class="duplicateControl">Duplicate</button>
+  <span class="requiredDisplay"></span><br>
+  <label>${labelName}</label>
+  <div id="control${currentElement.id}MultiOptions"></div>
+  <button id="control${currentElement.id}DeleteButton" class="deleteControl">Delete</button></div>`;
+
+  let multiOptionsDiv = document.getElementById(`control${currentElement.id}MultiOptions`);
+
+  switch(inputType) {
+    case 'select':
+    case 'select multiple':
+      let selectHTML = `<${inputType}>`;
+      controlOptionsArray.forEach((option, index) => {
+        selectHTML += `<option>${controlOptionsArray[index]}</option>
+        `;
+      });
+      selectHTML += `</select>`;
+      multiOptionsDiv.innerHTML = selectHTML;
+    break;
+    default:
+    controlOptionsArray.forEach((option, index) => {
+      multiOptionsDiv.innerHTML += `
+        <p>
+        <label>${controlOptionsArray[index]}</label>  
+        <input type="${inputType}" class="checkboxOption" value="${controlOptionsArray[index]}"/>
+        </p>
+        `;
+      });
+    break;
+  }
+  
+  let deleteButton = document.getElementById(`control${currentElement.id}DeleteButton`);
+  let duplicateButton = document.getElementById(`control${currentElement.id}DuplicateButton`);
+  addDeleteListener(deleteButton);
+  addDuplicateListener(duplicateButton);
+  
+  // controlClickDisplayOptions(currentElement);
+}
 function addControlOption(elementId, className) {
   let controlInputs = document.getElementsByClassName(className);
   let controlInput = controlInputs[controlInputs.length - 1]
@@ -161,6 +228,7 @@ function addControlOption(elementId, className) {
   });
   newRow.addEventListener('change', event => {
     updateControlOption(elementObject, newRow, index);
+    updateStagingAreaHTML(elementObject, className);
   });
 }
 
@@ -349,11 +417,14 @@ function displayAppropriateOptions(elementObject) {
   optionsList.insertAdjacentHTML('afterbegin', htmlToDisplay);
   
   // add event listeners to all the multiple options inputs
-  let optionClasses = ['checkboxOption','radioOption','selectOption'];
+  let optionClasses = ['checkboxOption','radioOption','selectOption', 'selectMultipleOption'];
   optionClasses.forEach(optionClass => {
     Array.from(document.getElementsByClassName(optionClass)).forEach(function(option, index) {
       option.addEventListener('keyup', event => {
         updateControlOption(elementObject, option, index);
+      });
+      option.addEventListener('change', event => {
+        updateStagingAreaHTML(elementObject, optionClass);
       });
     });
   });
@@ -480,7 +551,6 @@ function addDeleteListener(button) {
 function addDuplicateListener(button) {
   button.addEventListener('click', function() {
     listOfDisplayOptions[0].id = 0;
-    console.log("display options:", listOfDisplayOptions); 
 
     const control = button.parentElement;
     const clone = control.cloneNode(true);
